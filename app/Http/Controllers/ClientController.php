@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
-use App\Models\User;
-
 
 
 class ClientController extends Controller
@@ -23,7 +21,7 @@ class ClientController extends Controller
         return view('clients.create', compact('email'));
     }
     
-    // Generate a unique email in the format numbers@test.com
+    //Generate a unique email in the format numbers@test.com
     public function generateUniqueEmail(): string
     {
         do {
@@ -57,12 +55,11 @@ class ClientController extends Controller
         return redirect()->route('clients.index')->with('success', 'Client added successfully.');      
     }
 
-    // Search for client
+    //Search for client
     public function search(Request $request)
     {
         $search = $request->get('search');
             
-        // If a search term is provided, filter client by name
         if ($search) {
             $clients = Client::where('first_name', 'like', '%' . $search . '%')->get();
         } else {

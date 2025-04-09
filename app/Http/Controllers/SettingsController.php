@@ -24,13 +24,13 @@ class SettingsController extends Controller
             'app_logo' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048',
         ]);
     
-        $settings = Setting::first(); // Get existing settings
+        $settings = Setting::first(); //Get existing settings
     
         if (!$settings) {
-            $settings = new Setting(); // Create if not exists
+            $settings = new Setting(); //Create if not exists
         }
     
-        // Save new logo if uploaded
+        //Save new logo if uploaded
         if ($request->hasFile('app_logo')) {
             $file = $request->file('app_logo');
             $filename = time() . '.' . $file->getClientOriginalExtension();
@@ -38,7 +38,7 @@ class SettingsController extends Controller
     
             $file->move(public_path('uploads/AppLogo/'), $filename);
     
-            // Delete the old file if it exists
+            //Delete the old file if it exists
             if ($settings->app_logo && File::exists(public_path($settings->app_logo))) {
                 File::delete(public_path($settings->app_logo));
             }
@@ -46,7 +46,7 @@ class SettingsController extends Controller
             $settings->app_logo = $path;
         }
     
-        // Assign all form values to settings
+        //Assign all form values to settings
         $settings->app_name = $request->app_name;
         $settings->company_name = $request->company_name;
         $settings->company_phone = $request->company_phone;
@@ -57,7 +57,7 @@ class SettingsController extends Controller
         $settings->fax_number = $request->fax_number;
         $settings->company_address = $request->company_address;
     
-        $settings->save(); // Save to database
+        $settings->save(); //Save to database
     
         return redirect()->route('settings.index')->with('success', 'Settings updated successfully.');
     }

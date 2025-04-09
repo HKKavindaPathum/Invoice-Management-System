@@ -4,46 +4,41 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Models\Category;  // Import the Category model
+use App\Models\Category;
 use Illuminate\Support\Facades\File;
 
 
 class ProductController extends Controller
 {
-    // Display all products
+    //Display all products
     public function index()
     {
-        $products = Product::all(); // Fetch all products
+        $products = Product::all();
         return view('products.index', compact('products'));
     }
 
     public function show($id)
     {
-        // Retrieve the product by its ID
         $product = Product::with('category')->findOrFail($id);
 
-        // Pass the product data to the view
         return view('products.show', compact('product'));
     }
 
 
-    // Show the form for creating a new product
+    //Show the form for creating a new product
     public function create()
     {
-        $categories = Category::all();  // Fetch all categories
+        $categories = Category::all();
 
-        // Pass the next product ID and categories to the view
         return view('products.create', compact( 'categories'));
     }
 
 
-    // Store a new product
-
-
+    //Store a new product
     public function store(Request $request)
     {
         try {
-            // Validate input
+            //Validate input
             $request->validate([
                 'name' => 'required|string|max:255|unique:products,name,NULL,id,category_id,' . $request->category_id,
                 'category_id' => 'required|exists:categories,id',
@@ -54,10 +49,10 @@ class ProductController extends Controller
                 'name.unique' => 'The product with this name already exists in this category.',
             ]);
     
-            // Initialize image variable to NULL
+            //Initialize image variable to NULL
             $imagePath = null;
     
-            // Check if an image is uploaded
+            //Check if an image is uploaded
             if ($request->hasFile('image')) {
                 $file = $request->file('image');
                 $extension = $file->getClientOriginalExtension();
@@ -66,23 +61,23 @@ class ProductController extends Controller
                 $path = 'uploads/product/';
                 $file->move($path, $filename);
     
-                // Set the image path
+                //Set the image path
                 $imagePath = $path . $filename;
             }
     
-            // Create Product
+            //Create Product
             Product::create([
                 'name' => $request->name,
                 'category_id' => $request->category_id,
                 'unit_price' => $request->unit_price,
                 'description' => $request->description,
-                'image' => $imagePath,  // Set to NULL if no image uploaded
+                'image' => $imagePath,  //Set to NULL if no image uploaded
             ]);
     
             return redirect()->route('products.index')->with('success', 'Product added successfully!');
     
         } catch (\Exception $e) {
-            // Handle any exception (including QueryException)
+            //Handle any exception (including QueryException)
             return redirect()->route('products.create')->with('error', 'The product already exists in this category!');
         }
     }

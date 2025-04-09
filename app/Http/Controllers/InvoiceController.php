@@ -39,7 +39,7 @@ class InvoiceController extends Controller {
     }
     public function store(Request $request) {
 
-        // Validate the request
+        //Validate the request
         $validatedData = $request->validate([
             'client_id' => 'required|exists:clients,id',
             'invoice_date' => 'required|date',
@@ -57,7 +57,7 @@ class InvoiceController extends Controller {
             'products.*.amount' => 'required|numeric',
         ]);
     
-        // Create the invoice
+        //Create the invoice
         $invoice = Invoice::create([
             'client_id' => $request->client_id,
             'invoice_date' => $request->invoice_date,
@@ -66,12 +66,12 @@ class InvoiceController extends Controller {
             'total_amount' => $request->total_amount,
             'final_amount' => $request->final_amount,
             'discount_type' => $request->discount_type,
-            'discount' => $request->discount ?? 0, // Default to 0 if null
+            'discount' => $request->discount ?? 0, //Default to 0 if null
             'note' => $request->note,
         ]);
     
     
-        // Save product invoices
+        //Save product invoices
         foreach ($request->products as $product) {
             ProductInvoice::create([
                 'invoice_id' => $invoice->id,
@@ -87,7 +87,7 @@ class InvoiceController extends Controller {
     
 
     public function edit(Invoice $invoice) {
-        // Fetch the invoice with its associated client and products
+        //Fetch the invoice with its associated client and products
         $invoice->load('client', 'productInvoices.product');
         $clients = Client::all();
         $products = Product::all();
@@ -96,7 +96,7 @@ class InvoiceController extends Controller {
     }
     
     public function update(Request $request, Invoice $invoice) {
-        // Validate the request
+        //Validate the request
         $request->validate([
             'client_id' => 'required|exists:clients,id',
             'invoice_date' => 'required|date',
@@ -114,7 +114,7 @@ class InvoiceController extends Controller {
             'products.*.amount' => 'required|numeric',
         ]);
     
-        // Update the invoice
+        //Update the invoice
         $invoice->update([
             'client_id' => $request->client_id,
             'invoice_date' => $request->invoice_date,
@@ -127,10 +127,10 @@ class InvoiceController extends Controller {
             'note' => $request->note,
         ]);
     
-        // Delete existing product invoices
+        //Delete existing product invoices
         $invoice->productInvoices()->delete();
     
-        // Save updated product invoices
+        //Save updated product invoices
         foreach ($request->products as $product) {
             ProductInvoice::create([
                 'invoice_id' => $invoice->id,
@@ -172,7 +172,7 @@ class InvoiceController extends Controller {
     {
         $query = Invoice::query();
     
-        // Filter by date range
+        //Filter by date range
         if ($request->has('start_date') && $request->start_date != '') {
             $query->where('invoice_date', '>=', $request->start_date);
         }
@@ -180,36 +180,36 @@ class InvoiceController extends Controller {
             $query->where('invoice_date', '<=', $request->end_date);
         }
     
-        // Filter by status
+        //Filter by status
         if ($request->has('status') && $request->status != '') {
             $query->where('status', $request->status);
         }
     
-        // Fetch the filtered invoices
+        //Fetch the filtered invoices
         $invoices = $query->with('client')->get();
     
-        // Return the view with filtered invoices
+        //Return the view with filtered invoices
         return view('invoices.index', compact('invoices'));
     }
 
     public function print($id)
     {
-        // Fetch the invoice
+        //Fetch the invoice
         $invoice = Invoice::with(['client', 'productInvoices.product'])->findOrFail($id);
 
-        // Return a printable view
+        //Return a printable view
         return view('invoices.print', compact('invoice'));
     }
 
     public function download($id)
     {
-        // Fetch the invoice
+        //Fetch the invoice
         $invoice = Invoice::with(['client', 'productInvoices.product'])->findOrFail($id);
 
-        // Generate PDF
+        //Generate PDF
         $pdf = Pdf::loadView('invoices.print', compact('invoice'));
 
-        // Download the PDF
+        //Download the PDF
         return $pdf->download("invoice-{$invoice->id}.pdf");
     }
 

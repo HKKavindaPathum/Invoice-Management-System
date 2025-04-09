@@ -8,7 +8,6 @@
                 Client Information
             </h1>
 
-            <!-- Client Details -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Left Column -->
                 <div class="space-y-4">

@@ -5,8 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>Invoice Management System</title>
-
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -15,54 +13,54 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 flex">
+        <div class="min-h-screen flex">
             <!-- Sidebar -->
-            <div class="w-1/6 bg-gray-800 text-white p-6 h-screen fixed left-0 top-0 overflow-y-auto">
-                <ul class="space-y-4">
-                    <li>
-                        <a href="{{ route('dashboard') }}" 
-                           class="block px-4 py-2 rounded-lg hover:bg-gray-700 transition 
-                           {{ request()->routeIs('dashboard') ? 'underline font-bold' : '' }}">
-                           Dashboard
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('categories.index') }}" 
-                           class="block px-4 py-2 rounded-lg hover:bg-gray-700 transition 
-                           {{ request()->routeIs('categories.index') ? 'underline font-bold' : '' }}">
-                           Categories
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('products.index') }}" 
-                           class="block px-4 py-2 rounded-lg hover:bg-gray-700 transition 
-                           {{ request()->routeIs('products.index') ? 'underline font-bold' : '' }}">
-                           Products
-                        </a> 
-                    </li>
-                    <li>
-                        <a href="{{ route('clients.index') }}" 
-                           class="block px-4 py-2 rounded-lg hover:bg-gray-700 transition 
-                           {{ request()->routeIs('clients.index') ? 'underline font-bold' : '' }}">
-                           Clients
-                        </a> 
-                    </li>
-                    <li>
-                        <a href="{{ route('invoices.index') }}" 
-                           class="block px-4 py-2 rounded-lg hover:bg-gray-700 transition 
-                           {{ request()->routeIs('invoices.index') ? 'underline font-bold' : '' }}">
-                           Invoices
-                        </a> 
-                    </li>
-                    <li>
-                        <a href="{{ route('settings.index') }}" 
-                           class="block px-4 py-2 rounded-lg hover:bg-gray-700 transition 
-                           {{ request()->routeIs('settings.index') ? 'underline font-bold' : '' }}">
-                           Settings
-                        </a> 
-                    </li>
-                </ul>
+            <div class="w-64 bg-gray-900 text-white p-6 h-screen fixed left-0 top-0 overflow-y-auto shadow-lg">
+                <nav class="space-y-2">
+                    <!-- Dashboard -->
+                    <a href="{{ route('dashboard') }}"
+                        class="flex items-center px-4 py-3 rounded-md hover:bg-gray-700 transition 
+                        {{ request()->routeIs('dashboard') ? 'bg-gray-800 font-semibold border-l-4 border-blue-400' : '' }}">
+                        📈 Dashboard
+                    </a>
+
+                    <!-- Categories -->
+                    <a href="{{ route('categories.index') }}"
+                        class="flex items-center px-4 py-3 rounded-md hover:bg-gray-700 transition 
+                        {{ request()->routeIs('categories.index') ? 'bg-gray-800 font-semibold border-l-4 border-blue-400' : '' }}">
+                        📂 Categories
+                    </a>
+
+                    <!-- Products -->
+                    <a href="{{ route('products.index') }}"
+                        class="flex items-center px-4 py-3 rounded-md hover:bg-gray-700 transition 
+                        {{ request()->routeIs('products.index') ? 'bg-gray-800 font-semibold border-l-4 border-blue-400' : '' }}">
+                        📦 Products
+                    </a>
+
+                    <!-- Clients -->
+                    <a href="{{ route('clients.index') }}"
+                        class="flex items-center px-4 py-3 rounded-md hover:bg-gray-700 transition 
+                        {{ request()->routeIs('clients.index') ? 'bg-gray-800 font-semibold border-l-4 border-blue-400' : '' }}">
+                        👥 Clients
+                    </a>
+
+                    <!-- Invoices -->
+                    <a href="{{ route('invoices.index') }}"
+                        class="flex items-center px-4 py-3 rounded-md hover:bg-gray-700 transition 
+                        {{ request()->routeIs('invoices.index') ? 'bg-gray-800 font-semibold border-l-4 border-blue-400' : '' }}">
+                        🧾 Invoices
+                    </a>
+
+                    <!-- Settings -->
+                    <a href="{{ route('settings.index') }}"
+                        class="flex items-center px-4 py-3 rounded-md hover:bg-gray-700 transition 
+                        {{ request()->routeIs('settings.index') ? 'bg-gray-800 font-semibold border-l-4 border-blue-400' : '' }}">
+                        ⚙️ Settings
+                    </a>
+                </nav>
             </div>
+
             
 
             <!-- Main Content -->

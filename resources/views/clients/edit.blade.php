@@ -6,14 +6,12 @@
 
         <form action="{{ route('clients.update', $client->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('PUT') <!-- Use PUT method for updates -->
+            @method('PUT') 
 
-            <!-- Grid Container -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Left Column -->
                 <div class="space-y-6">
 
-                    <!-- Title -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Title</label>
                         <select name="title" required 
@@ -26,8 +24,6 @@
                         </select>
                     </div>
 
-
-                    <!-- First Name -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700">First Name</label>
                         <input type="text" name="first_name" required 
@@ -35,7 +31,6 @@
                                value="{{ old('first_name', $client->first_name) }}">
                     </div>
 
-                    <!-- Last Name -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Last Name</label>
                         <input type="text" name="last_name" required 
@@ -43,7 +38,6 @@
                                value="{{ old('last_name', $client->last_name) }}">
                     </div>
 
-                    <!-- Country -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Country</label>
                         <input type="text" name="country"
@@ -51,7 +45,6 @@
                                value="{{ old('country', $client->country) }}">
                     </div>
                     
-                    <!-- Passport No -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Passport No</label>
                         <input type="text" name="passport_no" 
@@ -63,14 +56,12 @@
                 <!-- Right Column -->
                 <div class="space-y-6">
 
-                    <!-- Address -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Address</label>
                         <textarea name="address"
                                   class="w-full border p-2 rounded-lg mt-1 focus:ring focus:ring-blue-300 focus:border-blue-500 outline-none">{{ old('address', $client->address) }}</textarea>
                     </div>
 
-                    <!-- Company Name -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Company Name</label>
                         <input type="text" name="company_name"
@@ -78,7 +69,6 @@
                                value="{{ old('company_name', $client->company_name) }}">
                     </div>
 
-                    <!-- Mobile No -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Mobile No</label>
                         <input type="text" name="mobile_no"
@@ -86,7 +76,6 @@
                                value="{{ old('mobile_no', $client->mobile_no) }}">
                     </div>
 
-                    <!-- Email -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Email</label>
                         <input type="email" name="email"
@@ -94,7 +83,6 @@
                                value="{{ old('email', $client->email) }}">
                     </div>
 
-                    <!-- Note -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Note</label>
                         <textarea name="note"

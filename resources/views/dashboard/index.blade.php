@@ -56,7 +56,7 @@
     <div class="mt-6">
         <div class="bg-white p-6 rounded-lg shadow-md">
             <h3 class="text-xl font-semibold mb-4">Invoice Status</h3>
-            <div class="relative w-full h-96"> <!-- Adjusted height -->
+            <div class="relative w-full h-96">
                 <canvas id="invoiceStatusChart" width="400" height="400"></canvas>
             </div>
         </div>
@@ -123,20 +123,20 @@
         let incomeChart;
         const filterPopup = document.getElementById('filterPopup');
 
-        // Toggle Filter Popup
+        //Toggle Filter Popup
         document.getElementById('filter_icon').addEventListener('click', function (e) {
             e.stopPropagation(); // Prevent event bubbling
             filterPopup.classList.toggle('hidden');
         });
 
-        // Close Filter Popup when clicking outside
+        //Close Filter Popup when clicking outside
         document.addEventListener('click', function (e) {
             if (!filterPopup.contains(e.target) && !document.getElementById('openFilterPopup').contains(e.target)) {
                 filterPopup.classList.add('hidden');
             }
         });
 
-        // Switch between Single Date and Date Range fields
+        //Switch between Single Date and Date Range fields
         document.getElementById('filterType').addEventListener('change', function () {
             if (this.value === 'single') {
                 document.getElementById('singleDateField').classList.remove('hidden');
@@ -147,7 +147,7 @@
             }
         });
 
-        // Fetch and Render Income Data
+        //Fetch and Render Income Data
         function fetchIncomeData(startDate, endDate) {
             fetch(`/dashboard/income-data?start_date=${startDate}&end_date=${endDate}`)
                 .then(response => response.json())
@@ -175,12 +175,12 @@
                         }
                     });
 
-                    // Update Total Income
+                    //Update Total Income
                     document.getElementById('totalIncome').textContent = `$${data.totalIncome.toFixed(2)}`;
                 });
         }
 
-        // Filter Button Click Event
+        //Filter Button Click Event
         document.getElementById('filter_income').addEventListener('click', function () {
             const filterType = document.getElementById('filterType').value;
             let startDate, endDate;
@@ -201,32 +201,32 @@
             filterPopup.classList.add('hidden');
         });
 
-        // Clear Button Click Event
+        //Clear Button Click Event
         document.getElementById('clear_filter').addEventListener('click', function () {
-            // Clear the date fields
+            //Clear the date fields
             document.getElementById('single_date').value = '';
             document.getElementById('start_date').value = '';
             document.getElementById('end_date').value = '';
 
-            // Fetch default data (e.g., last 30 days)
+            //Fetch default data (e.g., last 30 days)
             const endDate = new Date().toISOString().split('T')[0];
             const startDate = new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0];
             fetchIncomeData(startDate, endDate);
 
-            // Close the filter popup
+            //Close the filter popup
             filterPopup.classList.add('hidden');
         });
 
-        // Initial Load with Default Data (Last 30 Days)
+        //Initial Load with Default Data (Last 30 Days)
         const endDate = new Date().toISOString().split('T')[0];
         const startDate = new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0];
         fetchIncomeData(startDate, endDate);
     });
 
-    // Pie Chart
+    //Pie Chart
     var ctx = document.getElementById('invoiceStatusChart').getContext('2d');
 
-    // Invoice data
+    //Invoice data
     var invoiceCounts = [
         {{ $paid }},
         {{ $unpaid }},
@@ -246,7 +246,7 @@
     var invoiceLabels = ['Paid', 'Unpaid', 'Partially Paid', 'Overdue', 'Processing'];
     var backgroundColors = ['#28a745', '#dc3545', '#ffc107', '#ff5733', '#17a2b8'];
 
-    // Create the pie chart
+    //Create the pie chart
     var invoiceStatusChart = new Chart(ctx, {
         type: 'pie',
         data: {
@@ -265,23 +265,23 @@
                     labels: { font: { size: 12 } }
                 },
                 datalabels: {
-                    color: '#fff', // White text color
+                    color: '#fff', //White text color
                     font: {
                         weight: 'bold',
                         size: 12
                     },
                     backgroundColor: function(context) {
-                        // Remove background for 0% values
+                        //Remove background for 0% values
                         return context.dataset.data[context.dataIndex] > 0 ? '#000' : null;
                     },
-                    borderRadius: 4, // Rounded corners for the background box
-                    padding: 6, // Padding around the text
+                    borderRadius: 4, //Rounded corners for the background box
+                    padding: 6, //Padding around the text
                     formatter: (value, context) => {
                         var index = context.dataIndex;
                         var count = invoiceCounts[index];
                         var name = invoiceLabels[index]; 
 
-                        // Hide label if value is 0%
+                        //Hide label if value is 0%
                         return value > 0 ? `${name}: ${value}% (${count})` : '';
                     }
                 }

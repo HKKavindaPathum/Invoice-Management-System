@@ -3,7 +3,6 @@
 @section('content')
     <div class="mx-auto  bg-white shadow-lg rounded-lg p-6 mt-1">
         
-        <!-- Flex Container for Search and Add client Button -->
         <div class="flex justify-between items-center mb-4">
             <!-- Search Form -->
             <form action="{{ route('clients.search') }}" method="GET" class="relative w-1/4">

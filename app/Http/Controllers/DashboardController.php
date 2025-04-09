@@ -12,7 +12,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Fetch totals for the dashboard
+        //Fetch totals for the dashboard
         $totalClients = Client::count();
         $totalCategories = Category::count();
         $totalInvoices = Invoice::count();
@@ -21,14 +21,14 @@ class DashboardController extends Controller
         $totalIncome = Invoice::where('status', 'paid')->sum('final_amount');
         $totalProducts = Product::count();
 
-        //pie chart
+        //Pie chart
         $paid = Invoice::where('status', 'paid')->count();
         $unpaid = Invoice::where('status', 'unpaid')->count();
         $partiallyPaid = Invoice::where('status', 'partially_paid')->count();
         $overdue = Invoice::where('status', 'overdue')->count();
         $processing = Invoice::where('status', 'processing')->count();
 
-        // Calculate percentages
+        //Calculate percentages
         $paidPercent = ($totalInvoices > 0) ? number_format(($paid / $totalInvoices) * 100, 2) : 0;
         $unpaidPercent = ($totalInvoices > 0) ? number_format(($unpaid / $totalInvoices) * 100, 2) : 0;
         $partiallyPaidPercent = ($totalInvoices > 0) ? number_format(($partiallyPaid / $totalInvoices) * 100, 2) : 0;
@@ -66,16 +66,16 @@ class DashboardController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
 
-        // Fetch paid invoices within the date range
+        //Fetch paid invoices within the date range
         $incomeData = Invoice::where('status', 'paid')
             ->whereBetween('invoice_date', [$startDate, $endDate])
             ->orderBy('invoice_date')
             ->get(['invoice_date', 'final_amount']);
 
-        // Calculate total income for the filtered date range
+        //Calculate total income for the filtered date range
         $totalIncome = $incomeData->sum('final_amount');
 
-        // Format data for the chart
+        //Format data for the chart
         $labels = $incomeData->pluck('invoice_date')->map(function ($date) {
             return \Carbon\Carbon::parse($date)->format('Y-m-d');
         });

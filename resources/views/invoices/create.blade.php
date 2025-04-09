@@ -122,14 +122,14 @@
 <script>
 
     $(document).ready(function() {
-        // Set today's date as default for the invoice date field
-        let today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+        //Set today's date as default for the invoice date field
+        let today = new Date().toISOString().split('T')[0]; //Get today's date in YYYY-MM-DD format
         $("#invoice-date").val(today);
     });
 
     $(document).ready(function() {
 
-        // Fetch unit price on product selection
+        //Fetch unit price on product selection
         $(document).on("change", ".product-select", function() {
             let row = $(this).closest(".product-item");
             let productId = $(this).val();
@@ -150,29 +150,29 @@
             }
         });
 
-        // Add new product row
+        //Add new product row
         $("#add-product").click(function() {
-            let newProduct = $(".product-item:first").clone(); // Clone the first product row
-            let index = $(".product-item").length; // Get the current number of product rows
+            let newProduct = $(".product-item:first").clone(); //Clone the first product row
+            let index = $(".product-item").length; //Get the current number of product rows
 
-            // Clear input values
+            //Clear input values
             newProduct.find("input").val("");
             newProduct.find("select").prop("selectedIndex", 0);
             newProduct.find(".unit-price, .amount").val("0");
             newProduct.find(".quantity, .days").val("1");
 
-            // Update the name attributes with the correct index
+            //Update the name attributes with the correct index
             newProduct.find('[name^="products[0]"]').each(function() {
                 let name = $(this).attr("name");
                 name = name.replace("products[0]", `products[${index}]`);
                 $(this).attr("name", name);
             });
 
-            // Append the new product row to the container
+            //Append the new product row to the container
             $("#products-container").append(newProduct);
         });
 
-        // Remove product row
+        //Remove product row
         $(document).on("click", ".remove-product", function() {
             if ($(".product-item").length > 1) {
                 $(this).closest(".product-item").remove();
@@ -180,12 +180,12 @@
             }
         });
 
-        // Update amount dynamically when quantity or days change
+        //Update amount dynamically when quantity or days change
         $(document).on("input", ".quantity, .days", function() {
             updateAmount($(this).closest(".product-item"));
         });
 
-        // Calculate amount for each product row
+        //Calculate amount for each product row
         function updateAmount(row) {
             let unitPrice = parseFloat(row.find(".unit-price").val()) || 0;
             let quantity = parseFloat(row.find(".quantity").val()) || 1;
@@ -196,7 +196,7 @@
             updateTotalAmount();
         }
 
-        // Calculate total amount of all products
+        //Calculate total amount of all products
         function updateTotalAmount() {
             let totalAmount = 0;
             $(".amount").each(function() {
@@ -204,26 +204,26 @@
             });
 
             $("input[name='total_amount']").val(totalAmount.toFixed(2));
-            calculateFinalAmount(totalAmount); // Update final amount after discount
+            calculateFinalAmount(totalAmount);
         }
 
-        // Calculate final amount after applying discount
+        //Calculate final amount after applying discount
         function calculateFinalAmount(totalAmount) {
-            let discountType = $("#discount-type").val(); // Discount type: percentage or fixed
+            let discountType = $("#discount-type").val(); //Discount type: percentage or fixed
             let discountValue = parseFloat($("#discount-value").val()) || 0;
             let finalAmount = totalAmount;
 
             if (discountType === "percentage") {
-                finalAmount -= (totalAmount * discountValue / 100); // Percentage discount
+                finalAmount -= (totalAmount * discountValue / 100); //Percentage discount
             } else if (discountType === "fixed") {
-                finalAmount -= discountValue; // Fixed amount discount
+                finalAmount -= discountValue; //Fixed amount discount
             }
 
-            finalAmount = finalAmount < 0 ? 0 : finalAmount; // Ensure amount doesn't go below 0
-            $("input[name='final_amount']").val(finalAmount.toFixed(2)); // Update final_amount field
+            finalAmount = finalAmount < 0 ? 0 : finalAmount; //Ensure amount doesn't go below 0
+            $("input[name='final_amount']").val(finalAmount.toFixed(2)); //Update final_amount field
         }
 
-        // Trigger discount calculation when discount type or value changes
+        //Trigger discount calculation when discount type or value changes
         $("#discount-type, #discount-value").on("change input", function() {
             let totalAmount = parseFloat($("input[name='total_amount']").val()) || 0;
             calculateFinalAmount(totalAmount);

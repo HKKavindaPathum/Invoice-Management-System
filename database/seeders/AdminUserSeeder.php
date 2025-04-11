@@ -15,13 +15,13 @@ class AdminUserSeeder extends Seeder
      */
     public function run()
     {
-        // Check if the admin already exists to prevent duplication
+        //Check if the admin already exists to prevent duplication
         if (DB::table('users')->where('email', 'admin@gmail.com')->doesntExist()) {
             DB::table('users')->insert([
                 'name' => 'admin',
                 'email' => 'admin@gmail.com',
-                'password' => Hash::make('12345678'),  // Hash the password
-                'email_verified_at' => now(),  // Set email verified timestamp
+                'password' => Hash::make('12345678'),  //Hash the password
+                'email_verified_at' => now(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

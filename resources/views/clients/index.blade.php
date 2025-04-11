@@ -30,21 +30,19 @@
                 </button>
             </form>
 
-            <!-- Button to Add client -->
             <a href="{{ route('clients.create') }}" 
                 class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-3 rounded-lg transition duration-200 mt-12">
                 Add Client
             </a>
         </div>
         
-        <!-- Display Success Message Using Alert (JavaScript) -->
+        <!-- Display Success Message -->
         @if(session('success'))
             <script>
                 alert('{{ session('success') }}');
             </script>
         @endif
 
-        <!-- Table to Display Clients -->
         <div class="mt-6">
             <table class="w-3/4 border-collapse border border-gray-300 mx-auto">
                 <thead>
@@ -93,7 +91,7 @@
 
 @push('scripts')
 <script>
-    // Clear the search field
+    //Clear the search field
     function clearSearch() {
         window.location.href = '{{ route('clients.index') }}';
     }

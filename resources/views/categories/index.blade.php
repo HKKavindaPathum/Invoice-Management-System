@@ -3,7 +3,6 @@
 @section('content')
     <div class="mx-auto  bg-white shadow-lg rounded-lg p-6 mt-1">
         
-        <!-- Flex Container for Search and Add Category Button -->
         <div class="flex justify-between items-center mb-4">
             <!-- Search Form -->
             <form action="{{ route('categories.search') }}" method="GET" class="relative w-1/4">
@@ -38,19 +37,18 @@
             </button>
         </div>
         
-        <!-- Display Success Message Using Alert (JavaScript) -->
+        <!-- Display Success Message -->
         @if(session('success'))
             <script>
                 alert('{{ session('success') }}');
             </script>
         @endif
 
-        <!-- Table to Display Categories -->
         <div class="mt-6">
             <table class="w-3/4 border-collapse border border-gray-300 mx-auto">
                 <thead>
                     <tr class="bg-gray-200">
-                        <th class="border border-gray-300 px-4 py-2">Category Name</th>
+                        <th class="border border-gray-300 py-2">Category Name</th>
                         <th class="border border-gray-300 px-4 py-2">Product</th>
                         <th class="border border-gray-300 px-4 py-2">Actions</th>
                     </tr>
@@ -58,7 +56,7 @@
                 <tbody>
                     @foreach($categories as $index => $category)
                         <tr class="text-center">
-                            <td class="border border-gray-300 px-4 py-2">
+                            <td class="border border-gray-300  py-2">
                                 <a href="{{ route('categories.show', $category->id) }}" class="text-blue-600 hover:text-blue-800">
                                     {{ $category->name }}
                                 </a>
@@ -140,29 +138,29 @@
 
 @push('scripts')
 <script>
-    // Open the Add Category modal
+    //Open the Add Category modal
     function openModal() {
         document.getElementById('categoryModal').classList.remove('hidden');
     }
 
-    // Close the Add Category modal
+    //Close the Add Category modal
     function closeModal() {
         document.getElementById('categoryModal').classList.add('hidden');
     }
 
-    // Clear the search field
+    //Clear the search field
     function clearSearch() {
         window.location.href = '{{ route('categories.index') }}';
     }
 
-    // Open the Edit Category modal with prefilled data
+    //Open the Edit Category modal with prefilled data
     function openEditModal(id, name) {
         document.getElementById('editCategoryName').value = name;
         document.getElementById('editCategoryForm').action = '/categories/' + id;
         document.getElementById('editCategoryModal').classList.remove('hidden');
     }
 
-    // Close the Edit Category modal
+    //Close the Edit Category modal
     function closeEditModal() {
         document.getElementById('editCategoryModal').classList.add('hidden');
     }

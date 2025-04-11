@@ -7,7 +7,6 @@
                 Category: {{ $category->name }}
             </h1>
     
-            <!-- List of Products in the Category -->
             <div class="space-y-6">
                 <h2 class="text-xl font-semibold text-gray-800 mb-4">Products in this Category:</h2>
     
@@ -49,7 +48,6 @@
                 @endif
             </div>
     
-            <!-- Back to Categories List Button -->
             <div class="mt-8 flex justify-center">
                 <a href="{{ route('categories.index') }}" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">
                     Back to Categories List

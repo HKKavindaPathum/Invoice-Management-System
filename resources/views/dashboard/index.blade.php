@@ -1,69 +1,68 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto p-6">
+<div class="container mx-auto p-4"> 
     <!-- Dashboard Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
-        <div class="bg-blue-500 text-white p-6 rounded-lg shadow-md">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"> 
+        <div class="bg-blue-500 text-white p-4 rounded-lg shadow-md">
             <a href="{{ route('clients.index') }}">
                 <h3 class="text-lg font-semibold">Total Clients</h3>
                 <p class="text-2xl font-bold">{{ $totalClients }}</p>
             </a>
         </div>
 
-        <div class="bg-green-500 text-white p-6 rounded-lg shadow-md">
+        <div class="bg-green-500 text-white p-4 rounded-lg shadow-md">
             <a href="{{ route('categories.index') }}">
                 <h3 class="text-lg font-semibold">Total Categories</h3>
                 <p class="text-2xl font-bold">{{ $totalCategories }}</p>
             </a>
         </div>
 
-        <div class="bg-yellow-500 text-white p-6 rounded-lg shadow-md">
+        <div class="bg-yellow-500 text-white p-4 rounded-lg shadow-md">
             <a href="{{ route('products.index') }}">
                 <h3 class="text-lg font-semibold">Total Products</h3>
                 <p class="text-2xl font-bold">{{ $totalProducts }}</p>
             </a>
         </div>
 
-        <div class="bg-blue-700 text-white p-6 rounded-lg shadow-md">
+        <div class="bg-blue-700 text-white p-4 rounded-lg shadow-md">
             <a href="{{ route('invoices.index') }}">
                 <h3 class="text-lg font-semibold">Total Invoices</h3>
                 <p class="text-2xl font-bold">{{ $totalInvoices }}</p>
             </a>
         </div>
 
-        <div class="bg-green-700 text-white p-6 rounded-lg shadow-md">
+        <div class="bg-green-700 text-white p-4 rounded-lg shadow-md">
             <a href="{{ route('invoices.index', ['status' => 'paid']) }}">
                 <h3 class="text-lg font-semibold">Total Paid Invoices</h3>
                 <p class="text-2xl font-bold">{{ $totalPaidInvoices }}</p>
             </a>
         </div>
 
-        <div class="bg-yellow-700 text-white p-6 rounded-lg shadow-md">
+        <div class="bg-yellow-700 text-white p-4 rounded-lg shadow-md">
             <a href="{{ route('invoices.index', ['status' => 'unpaid']) }}">
                 <h3 class="text-lg font-semibold">Total Unpaid Invoices</h3>
                 <p class="text-2xl font-bold">{{ $totalUnpaidInvoices }}</p>
             </a>
         </div>
 
-        <div class="bg-indigo-500 text-white p-6 rounded-lg shadow-md">
+        <div class="bg-indigo-500 text-white p-4 rounded-lg shadow-md sm:col-span-2 lg:col-span-1">
             <h3 class="text-lg font-semibold">Total Income</h3>
             <p class="text-2xl font-bold">${{ number_format($totalIncome, 2) }}</p>
         </div>
     </div>
 
     <!-- Invoice Status Pie Chart -->
-    <div class="mt-6">
-        <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="mt-4"> 
+        <div class="bg-white p-4 rounded-lg shadow-md">
             <h3 class="text-xl font-semibold mb-4">Invoice Status</h3>
-            <div class="relative w-full h-96">
-                <canvas id="invoiceStatusChart" width="400" height="400"></canvas>
-            </div>
+            <div class="relative w-full" style="height: 300px;"> 
+                <canvas id="invoiceStatusChart" width="400" height="300"></canvas> 
         </div>
     </div>               
 
     <!-- Income Overview Chart -->
-    <div class="bg-white p-6 mt-6 rounded-lg shadow-md relative">
+    <div class="bg-white p-4 mt-4 rounded-lg shadow-md relative"> 
         <h3 class="text-xl font-semibold mb-4 flex justify-between items-center">
             Income Overview 
             <button id="filter_icon" class="p-2 text-gray-600 hover:text-gray-800 focus:outline-none">
@@ -101,15 +100,17 @@
         </div>
 
         <!-- Chart -->
-        <canvas id="incomeChart" width="300" height="150"></canvas>
+        <div class="w-full overflow-x-auto"> 
+            <div class="min-w-[300px]"> 
+                <canvas id="incomeChart" height="200"></canvas> 
+            </div>
+        </div>
 
-        <div class="bg-white p-6 mt-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Total Income</h3>
+        <div class="bg-white p-4 mt-4 rounded-lg shadow-md"> 
+            <h3 class="text-xl font-semibold mb-2">Total Income</h3> 
             <p class="text-2xl font-bold" id="totalIncome">RS:{{ number_format($totalIncome, 2) }}</p>
         </div> 
     </div>
-    
-
 </div>
 @endsection
 
@@ -125,7 +126,7 @@
 
         //Toggle Filter Popup
         document.getElementById('filter_icon').addEventListener('click', function (e) {
-            e.stopPropagation(); // Prevent event bubbling
+            e.stopPropagation(); //Prevent event bubbling
             filterPopup.classList.toggle('hidden');
         });
 
@@ -265,7 +266,7 @@
                     labels: { font: { size: 12 } }
                 },
                 datalabels: {
-                    color: '#fff', //White text color
+                    color: '#fff',
                     font: {
                         weight: 'bold',
                         size: 12
@@ -289,6 +290,5 @@
         },
         plugins: [ChartDataLabels]
     });
-
 </script>
 @endpush

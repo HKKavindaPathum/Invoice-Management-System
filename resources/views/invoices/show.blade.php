@@ -31,7 +31,6 @@
                 </div>
             </div>
 
-            <!-- Product Table -->
             <div class="mt-6">
                 <h3 class="text-lg font-semibold">Products</h3>
                 <div class="overflow-x-auto">
@@ -60,7 +59,6 @@
                 </div>
             </div>
 
-            <!-- Total and Discount -->
             <div class="mt-6 space-y-2">
                 <p><strong>Total Amount:</strong> RS: {{ number_format($invoice->total_amount, 2) }}</p>
                 
@@ -75,7 +73,6 @@
                 <p><strong>Final Amount:</strong> RS: {{ number_format($invoice->final_amount, 2) }}</p>
             </div>
 
-            <!-- Notes -->
             <div class="mt-6">
                 <strong>Note:</strong>
                 <p class="border p-2 rounded bg-gray-50">{{ $invoice->note ?? 'No additional notes' }}</p>

@@ -28,7 +28,6 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
     Route::get('categories/{id}', [CategoryController::class, 'show'])->name('categories.show');
 
-
     //Products
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');

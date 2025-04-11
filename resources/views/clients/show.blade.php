@@ -3,7 +3,7 @@
 @section('content')
     <div class="flex items-center justify-center bg-gradient-to-r from-blue-50 to-purple-50 p-6">
         <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-4xl w-full">
-            <!-- Header -->
+
             <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">
                 Client Information
             </h1>
@@ -64,7 +64,6 @@
                 </div>
             </div>
             
-            <!-- Action Buttons -->
             <div class="mt-6 flex justify-center space-x-4">
                 <a href="{{ route('clients.edit', $client->id) }}" class= "bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">
                     Edit Client

@@ -3,7 +3,6 @@
 @section('content')
     <div class="mx-auto bg-white shadow-lg rounded-lg p-6 mt-1">
         
-        <!-- Flex Container for Search, Filter, and Add Invoice Button -->
         <div class="flex justify-between items-center mb-4">
             <!-- Search Bar on the Left -->
             <form action="{{ route('invoices.search') }}" method="GET" class="relative w-1/3">
@@ -31,7 +30,6 @@
                 </button>
             </form>
 
-            <!-- Filter Icon and Add Invoice Button on the Right -->
             <div class="flex items-center space-x-4 mt-12">
                 <!-- Filter Icon (Small) -->
                 <button 
@@ -42,7 +40,7 @@
                     </svg>
                 </button>
 
-                <!-- Add Invoice Button -->
+
                 <a href="{{ route('invoices.create') }}" 
                     class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-3 rounded-lg transition duration-200 ">
                     Add Invoices
@@ -89,14 +87,12 @@
                     </select>
                 </div>
     
-                <!-- Submit Button -->
                 <button 
                     type="submit" 
                     class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
                     Apply Filters
                 </button>
 
-                <!-- Clear Filters Button -->
                 <a href="{{ route('invoices.index') }}" 
                     class="w-full bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 text-center block mt-2">
                     Clear Filters
@@ -105,14 +101,13 @@
             </form>
         </div>
 
-        <!-- Display Success Message Using Alert (JavaScript) -->
+        <!-- Display Success Message -->
         @if(session('success'))
             <script>
                 alert('{{ session('success') }}');
             </script>
         @endif
 
-        <!-- Table to Display Invoices -->
         <div class="mt-6">
             <table class="w-4/5 border-collapse border border-gray-300 mx-auto">
                 <thead>
@@ -176,23 +171,23 @@
 
 @push('scripts')
 <script>
-    // Clear the search field
+    //Clear the search field
     function clearSearch() {
         window.location.href = '{{ route('invoices.index') }}';
     }
 
-    // Toggle filter form visibility
+    //Toggle filter form visibility
     function toggleFilter() {
         const filterForm = document.getElementById('filterForm');
         filterForm.classList.toggle('hidden');
     }
 
-    // Print Invoice
+    //Print Invoice
     function printInvoice(invoiceId) {
-        // Open a new window with the invoice details
+        //Open a new window with the invoice details
         const printWindow = window.open(`/invoices/${invoiceId}/print`, '_blank');
         
-        // Wait for the window to load and trigger print
+        //Wait for the window to load and trigger print
         printWindow.onload = function () {
             printWindow.print();
         };

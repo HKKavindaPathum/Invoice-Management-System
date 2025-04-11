@@ -3,7 +3,6 @@
 @section('content')
     <div class="mx-auto  bg-white shadow-lg rounded-lg p-6 mt-1">
         
-        <!-- Flex Container for Search and Add product Button -->
         <div class="flex justify-between items-center mb-4">
             <!-- Search Form -->
             <form action="{{ route('products.search') }}" method="GET" class="relative w-1/4">
@@ -31,21 +30,19 @@
                 </button>
             </form>
 
-            <!-- Button to Add Product -->
             <a href="{{ route('products.create') }}" 
                 class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-3 rounded-lg transition duration-200 mt-12">
                 Add Product
             </a>
         </div>
         
-        <!-- Display Success Message Using Alert (JavaScript) -->
+        <!-- Display Success Message -->
         @if(session('success'))
             <script>
                 alert('{{ session('success') }}');
             </script>
         @endif
 
-        <!-- Table to Display Categories -->
         <div class="mt-6">
             <table class="w-3/4 border-collapse border border-gray-300 mx-auto">
                 <thead>

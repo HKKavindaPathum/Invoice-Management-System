@@ -41,7 +41,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
     
-        // Sync multiple roles
+        //Sync multiple roles
         $roles = Role::whereIn('id', $request->roles)->get();
         $user->syncRoles($roles);
     

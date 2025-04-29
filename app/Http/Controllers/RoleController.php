@@ -31,7 +31,7 @@ class RoleController extends Controller
     
         $role = Role::create(['name' => $request->name]);
     
-        // Get the permission names from IDs
+        //Get the permission names from IDs
         $permissions = Permission::whereIn('id', $request->permissions)->get();
     
         $role->syncPermissions($permissions);

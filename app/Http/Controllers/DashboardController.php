@@ -36,8 +36,8 @@ class DashboardController extends Controller
         $processingPercent = ($totalInvoices > 0) ? number_format(($processing / $totalInvoices) * 100, 2) : 0;
 
         return view('dashboard.index', compact(
-  'totalClients',
- 'totalCategories',
+            'totalClients',
+            'totalCategories',
             'totalInvoices',
             'totalPaidInvoices',
             'totalUnpaidInvoices',

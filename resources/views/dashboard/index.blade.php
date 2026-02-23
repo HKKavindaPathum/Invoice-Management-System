@@ -219,9 +219,9 @@
             filterPopup.classList.add('hidden'); //Close the filter popup
         });
 
-        //Initial Load with Default Data (Last 30 Days)
+        //Initial Load with Default Data (Last 365 Days)
         const endDate = new Date().toISOString().split('T')[0];
-        const startDate = new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0];
+        const startDate = new Date(new Date().setDate(new Date().getDate() - 365)).toISOString().split('T')[0];
         fetchIncomeData(startDate, endDate);
     });
     

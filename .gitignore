@@ -1,3 +1,5 @@
 node_modules
 vendor
 .env
+admin.txt
+desktop.ini

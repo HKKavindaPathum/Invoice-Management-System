@@ -1,118 +1,164 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto p-4 bg-gray-50 min-h-screen">
+<div class="max-w-7xl mx-auto p-4 space-y-6">
     
     <!-- Dashboard Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         
-        <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-4 sm:p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300">
-            <a href="{{ route('clients.index') }}">
-                <h3 class="text-lg font-semibold">Clients</h3>
-                <p class="text-3xl font-bold mt-2">{{ $totalClients }}</p>
+        <!-- Clients Card -->
+        <div class="bg-white border border-slate-100/80 p-6 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.015)] hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-100/80 transition-all duration-300 flex justify-between items-center group">
+            <a href="{{ route('clients.index') }}" class="flex-1">
+                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Clients</h3>
+                <p class="text-3xl font-extrabold text-slate-800 mt-2 tracking-tight">{{ $totalClients }}</p>
             </a>
-        </div>
-
-        <div class="bg-gradient-to-br from-green-500 to-green-600 text-white  p-4 sm:p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300">
-            <a href="{{ route('categories.index') }}">
-                <h3 class="text-lg font-semibold">Categories</h3>
-                <p class="text-3xl font-bold mt-2">{{ $totalCategories }}</p>
-            </a>
-        </div>
-
-        <div class="bg-gradient-to-br from-yellow-400 to-yellow-500 text-white  p-4 sm:p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300">
-            <a href="{{ route('products.index') }}">
-                <h3 class="text-lg font-semibold">Products</h3>
-                <p class="text-3xl font-bold mt-2">{{ $totalProducts }}</p>
-            </a>
-        </div>
-
-        <div class="bg-gradient-to-br from-indigo-500 to-indigo-600 text-white  p-4 sm:p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300">
-            <a href="{{ route('invoices.index') }}">
-                <h3 class="text-lg font-semibold">Total Invoices</h3>
-                <p class="text-3xl font-bold mt-2">{{ $totalInvoices }}</p>
-            </a>
-        </div>
-
-        <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white  p-4 sm:p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300">
-            <a href="{{ route('invoices.index', ['status' => 'paid']) }}">
-                <h3 class="text-lg font-semibold">Paid Invoices</h3>
-                <p class="text-3xl font-bold mt-2">{{ $totalPaidInvoices }}</p>
-            </a>
-        </div>
-
-        <div class="bg-gradient-to-br from-rose-500 to-rose-600 text-white  p-4 sm:p-6 rounded-xl shadow-lg transform hover:scale-105 transition duration-300">
-            <a href="{{ route('invoices.index', ['status' => 'unpaid']) }}">
-                <h3 class="text-lg font-semibold">Unpaid Invoices</h3>
-                <p class="text-3xl font-bold mt-2">{{ $totalUnpaidInvoices }}</p>
-            </a>
-        </div>
-
-        <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white  p-4 sm:p-6 rounded-xl shadow-lg sm:col-span-2 lg:col-span-1 transform hover:scale-105 transition duration-300">
-            <h3 class="text-lg font-semibold">Total Income</h3>
-            <p class="text-3xl font-bold mt-2">${{ number_format($totalIncome, 2) }}</p>
-        </div>
-    </div>
-
-    <!-- Invoice Status Pie Chart -->
-    <div class="mt-6">
-        <div class="bg-white p-6 rounded-xl shadow-lg">
-            <h3 class="text-xl font-semibold mb-4 text-gray-700">Invoice Status</h3>
-            <div class="relative w-full" style="height: 300px;">
-                <canvas id="invoiceStatusChart" width="400" height="300"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <!-- Income Overview Chart -->
-    <div class="bg-white p-6 mt-6 rounded-xl shadow-lg relative">
-        <h3 class="text-xl font-semibold mb-4 flex justify-between items-center text-gray-700">
-            Income Overview
-            <button id="filter_icon" class="p-2 text-gray-600 hover:text-gray-800 focus:outline-none">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100 transition-colors duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-            </button>
-        </h3>
-
-        <!-- Filter Popup -->
-        <div id="filterPopup" class="absolute right-0 top-12 bg-white p-4 shadow-lg rounded-lg hidden w-64 z-10">
-            <label class="block text-sm font-medium text-gray-700">Filter Type:</label>
-            <select id="filterType" class="w-full px-4 py-2 border rounded-lg mt-1 focus:ring-2 focus:ring-blue-500">
-                <option value="single">Single Date</option>
-                <option value="range">Date Range</option>
-            </select>
-
-            <!-- Single Date Field -->
-            <div id="singleDateField" class="mt-2">
-                <label class="block text-sm font-medium text-gray-700">Select Date:</label>
-                <input type="date" id="single_date" class="w-full px-4 py-2 border rounded-lg mt-1 focus:ring-2 focus:ring-blue-500">
-            </div>
-
-            <!-- Date Range Fields -->
-            <div id="rangeDateFields" class="mt-2 hidden">
-                <label class="block text-sm font-medium text-gray-700">Start Date:</label>
-                <input type="date" id="start_date" class="w-full px-4 py-2 border rounded-lg mt-1 focus:ring-2 focus:ring-blue-500">
-                <label class="block text-sm font-medium text-gray-700 mt-2">End Date:</label>
-                <input type="date" id="end_date" class="w-full px-4 py-2 border rounded-lg mt-1 focus:ring-2 focus:ring-blue-500">
-            </div>
-
-            <!-- Buttons -->
-            <button id="filter_income" class="w-full bg-blue-600 text-white py-2 mt-3 rounded-lg hover:bg-blue-700">Filter</button>
-            <button id="clear_filter" class="w-full bg-gray-600 text-white py-2 mt-2 rounded-lg hover:bg-gray-700">Clear</button>
-        </div>
-
-        <!-- Chart -->
-        <div class="w-full overflow-x-auto">
-            <div class="min-w-[300px]">
-                <canvas id="incomeChart" height="200"></canvas>
             </div>
         </div>
 
-        <div class="bg-white p-4 mt-4 rounded-lg shadow-md border border-gray-100">
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">Total Income</h3>
-            <p class="text-2xl font-bold text-blue-600" id="totalIncome">RS:{{ number_format($totalIncome, 2) }}</p>
+        <!-- Categories Card -->
+        <div class="bg-white border border-slate-100/80 p-6 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.015)] hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-100/80 transition-all duration-300 flex justify-between items-center group">
+            <a href="{{ route('categories.index') }}" class="flex-1">
+                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Categories</h3>
+                <p class="text-3xl font-extrabold text-slate-800 mt-2 tracking-tight">{{ $totalCategories }}</p>
+            </a>
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-purple-50 text-purple-600 group-hover:bg-purple-100 transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Products Card -->
+        <div class="bg-white border border-slate-100/80 p-6 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.015)] hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-100/80 transition-all duration-300 flex justify-between items-center group">
+            <a href="{{ route('products.index') }}" class="flex-1">
+                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Products</h3>
+                <p class="text-3xl font-extrabold text-slate-800 mt-2 tracking-tight">{{ $totalProducts }}</p>
+            </a>
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-amber-50 text-amber-600 group-hover:bg-amber-100 transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Total Invoices Card -->
+        <div class="bg-white border border-slate-100/80 p-6 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.015)] hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-100/80 transition-all duration-300 flex justify-between items-center group">
+            <a href="{{ route('invoices.index') }}" class="flex-1">
+                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Invoices</h3>
+                <p class="text-3xl font-extrabold text-slate-800 mt-2 tracking-tight">{{ $totalInvoices }}</p>
+            </a>
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-blue-50 text-blue-600 group-hover:bg-blue-100 transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Paid Invoices Card -->
+        <div class="bg-white border border-slate-100/80 p-6 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.015)] hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-100/80 transition-all duration-300 flex justify-between items-center group">
+            <a href="{{ route('invoices.index', ['status' => 'paid']) }}" class="flex-1">
+                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Paid Invoices</h3>
+                <p class="text-3xl font-extrabold text-slate-800 mt-2 tracking-tight">{{ $totalPaidInvoices }}</p>
+            </a>
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100 transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Unpaid Invoices Card -->
+        <div class="bg-white border border-slate-100/80 p-6 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.015)] hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-100/80 transition-all duration-300 flex justify-between items-center group">
+            <a href="{{ route('invoices.index', ['status' => 'unpaid']) }}" class="flex-1">
+                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Unpaid Invoices</h3>
+                <p class="text-3xl font-extrabold text-slate-800 mt-2 tracking-tight">{{ $totalUnpaidInvoices }}</p>
+            </a>
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-rose-50 text-rose-600 group-hover:bg-rose-100 transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Total Income Card -->
+        <div class="bg-white border border-slate-100/80 p-6 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.015)] hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-100/80 transition-all duration-300 flex justify-between items-center group sm:col-span-2 lg:col-span-3">
+            <div class="flex-1">
+                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Income</h3>
+                <p class="text-3xl font-extrabold text-slate-800 mt-2 tracking-tight">RS: {{ number_format($totalIncome, 2) }}</p>
+            </div>
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-violet-50 text-violet-600 group-hover:bg-violet-100 transition-colors duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Invoice Status Pie Chart -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-100/80 shadow-[0_2px_12px_rgba(0,0,0,0.015)] lg:col-span-1 flex flex-col">
+            <h3 class="text-base font-bold text-slate-800 mb-4 tracking-tight">Invoice Status</h3>
+            <div class="relative flex-1 flex items-center justify-center min-h-[300px]">
+                <canvas id="invoiceStatusChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Income Overview Chart -->
+        <div class="bg-white p-6 rounded-2xl border border-slate-100/80 shadow-[0_2px_12px_rgba(0,0,0,0.015)] lg:col-span-2 relative flex flex-col">
+            <h3 class="text-base font-bold text-slate-800 mb-4 flex justify-between items-center tracking-tight">
+                Income Overview
+                <button id="filter_icon" class="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-xl transition duration-200 outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                    </svg>
+                </button>
+            </h3>
+
+            <!-- Filter Popup -->
+            <div id="filterPopup" class="absolute right-6 top-16 bg-white border border-slate-100 p-5 shadow-2xl rounded-2xl hidden w-72 z-10 transition-all duration-300">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Filter Type</label>
+                <select id="filterType" class="w-full px-4 py-2 border border-slate-200 rounded-xl mt-1 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none text-sm transition-all">
+                    <option value="single">Single Date</option>
+                    <option value="range">Date Range</option>
+                </select>
+
+                <!-- Single Date Field -->
+                <div id="singleDateField" class="mt-3">
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Select Date</label>
+                    <input type="date" id="single_date" class="w-full px-4 py-2 border border-slate-200 rounded-xl mt-1 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none text-sm transition-all">
+                </div>
+
+                <!-- Date Range Fields -->
+                <div id="rangeDateFields" class="mt-3 hidden">
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Start Date</label>
+                    <input type="date" id="start_date" class="w-full px-4 py-2 border border-slate-200 rounded-xl mt-1 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none text-sm transition-all">
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mt-3">End Date</label>
+                    <input type="date" id="end_date" class="w-full px-4 py-2 border border-slate-200 rounded-xl mt-1 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none text-sm transition-all">
+                </div>
+
+                <!-- Buttons -->
+                <div class="mt-4 space-y-2">
+                    <button id="filter_income" class="w-full bg-indigo-600 text-white font-semibold py-2.5 rounded-xl hover:bg-indigo-700 shadow-md shadow-indigo-600/10 transition-all outline-none">Filter</button>
+                    <button id="clear_filter" class="w-full bg-slate-100 text-slate-700 font-semibold py-2.5 rounded-xl hover:bg-slate-200 transition-all outline-none">Clear</button>
+                </div>
+            </div>
+
+            <!-- Chart -->
+            <div class="w-full flex-1 min-h-[300px]">
+                <canvas id="incomeChart"></canvas>
+            </div>
+
+            <div class="bg-slate-50 border border-slate-100 p-4 mt-4 rounded-xl flex justify-between items-center">
+                <span class="text-sm font-semibold text-slate-500">Filtered Total</span>
+                <span class="text-xl font-bold text-indigo-600" id="totalIncome">RS: {{ number_format($totalIncome, 2) }}</span>
+            </div>
         </div>
     </div>
 </div>
@@ -166,20 +212,37 @@
                             datasets: [{
                                 label: 'Income',
                                 data: data.data,
-                                backgroundColor: 'rgba(37, 99, 235, 0.2)',
-                                borderColor: 'rgba(37, 99, 235, 1)',
+                                backgroundColor: 'rgba(79, 70, 229, 0.05)',
+                                borderColor: 'rgba(79, 70, 229, 1)',
                                 borderWidth: 2,
-                                tension: 0.4
+                                fill: true,
+                                tension: 0.3,
+                                pointBackgroundColor: 'rgba(79, 70, 229, 1)',
+                                pointHoverRadius: 6,
                             }]
                         },
                         options: {
                             responsive: true,
-                            scales: { y: { beginAtZero: true } }
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { display: false }
+                            },
+                            scales: { 
+                                y: { 
+                                    beginAtZero: true,
+                                    grid: { color: 'rgba(0, 0, 0, 0.03)' },
+                                    ticks: { font: { family: 'Outfit', size: 11 }, color: '#64748b' }
+                                },
+                                x: {
+                                    grid: { display: false },
+                                    ticks: { font: { family: 'Outfit', size: 11 }, color: '#64748b' }
+                                }
+                            }
                         }
                     });
                     
                     //Update Total Income
-                    document.getElementById('totalIncome').textContent = `RS:${data.totalIncome.toFixed(2)}`;
+                    document.getElementById('totalIncome').textContent = `RS: ${data.totalIncome.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
                 });
         }
 
@@ -232,38 +295,46 @@
     var invoiceCounts = [{{ $paid }}, {{ $unpaid }}, {{ $partiallyPaid }}, {{ $overdue }}, {{ $processing }}];
     var invoicePercentages = [{{ $paidPercent }}, {{ $unpaidPercent }}, {{ $partiallyPaidPercent }}, {{ $overduePercent }}, {{ $processingPercent }}];
     var invoiceLabels = ['Paid', 'Unpaid', 'Partially Paid', 'Overdue', 'Processing'];
-    var backgroundColors = ['#22c55e', '#ef4444', '#facc15', '#f97316', '#06b6d4'];
+    var backgroundColors = ['#10b981', '#f43f5e', '#fbbf24', '#f97316', '#06b6d4'];
     
     //Create the pie chart
     var invoiceStatusChart = new Chart(ctxPie, {
-        type: 'pie',
+        type: 'doughnut',
         data: {
             labels: invoiceLabels,
             datasets: [{
                 data: invoicePercentages,
-                backgroundColor: backgroundColors
+                backgroundColor: backgroundColors,
+                borderWidth: 2,
+                borderColor: '#ffffff',
+                hoverOffset: 4
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
-                legend: { position: 'bottom' },
+                legend: { 
+                    position: 'bottom',
+                    labels: { font: { family: 'Outfit', size: 12 }, padding: 15, boxWidth: 12, usePointStyle: true }
+                },
                 datalabels: {
-                    color: '#fff',
-                    font: { weight: 'bold', size: 12 },
-                    backgroundColor: (context) => context.dataset.data[context.dataIndex] > 0 ? '#000' : null, //Remove background for 0% values
-                    borderRadius: 4, //Rounded corners for the background box
-                    padding: 6, //Padding around the text
+                    color: '#ffffff',
+                    font: { weight: 'bold', family: 'Outfit', size: 10 },
+                    backgroundColor: 'rgba(15, 23, 42, 0.85)',
+                    borderRadius: 6, //Rounded corners for the background box
+                    padding: { top: 4, bottom: 4, left: 6, right: 6 }, //Padding around the text
                     formatter: (value, context) => {
                         var index = context.dataIndex;
                         var count = invoiceCounts[index];
-                        var name = invoiceLabels[index];
-                        return value > 0 ? `${name}: ${value}% (${count})` : ''; //Hide label if value is 0%
+                        return value > 0 ? `${value}% (${count})` : ''; //Hide label if value is 0%
                     }
                 }
-            }
+            },
+            cutout: '65%'
         },
         plugins: [ChartDataLabels]
     });
 </script>
 @endpush
+

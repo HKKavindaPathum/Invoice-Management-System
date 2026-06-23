@@ -1,93 +1,96 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mx-auto bg-white shadow-xl rounded-xl p-6 mt-6 max-w-7xl">
+<div class="max-w-7xl mx-auto p-4 space-y-6">
+    <div class="bg-white border border-slate-100/80 shadow-[0_2px_12px_rgba(0,0,0,0.015)] rounded-2xl p-6">
 
-    <!-- Search + Add Category -->
-    <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 relative">
-        <!-- Search Form -->
-        <form action="{{ route('categories.search') }}" method="GET" class="flex w-full md:w-1/2 relative">
-            <input 
-                type="text" 
-                name="search" 
-                class="w-full px-4 py-2 border border-gray-300 rounded-l-full shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none transition duration-200"
-                placeholder="Search categories..." 
-                value="{{ request()->get('search') }}">
+        <!-- Search + Add Category -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 relative">
+            <!-- Search Form -->
+            <form action="{{ route('categories.search') }}" method="GET" class="flex w-full md:w-1/2 relative">
+                <input 
+                    type="text" 
+                    name="search" 
+                    class="w-full px-4 py-2.5 border border-slate-200 rounded-l-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition duration-200 text-sm"
+                    placeholder="Search categories..." 
+                    value="{{ request()->get('search') }}">
 
-            <!-- Clear Icon -->
-            @if(request()->get('search'))
-                <button 
-                    type="button" 
-                    onclick="clearSearch()" 
-                    class="absolute right-28 top-2 text-gray-400 hover:text-gray-600 transition duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                <!-- Clear Icon -->
+                @if(request()->get('search'))
+                    <button 
+                        type="button" 
+                        onclick="clearSearch()" 
+                        class="absolute right-28 top-3 text-slate-400 hover:text-slate-600 transition duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                @endif  
+
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-6 rounded-r-xl shadow-sm transition duration-200 text-sm outline-none">
+                    Search
                 </button>
-            @endif  
+            </form>
 
-            <button type="submit" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-2 px-6 rounded-r-full shadow-md transition duration-200">
-                Search
-            </button>
-        </form>
+            <!-- Add Category Button -->
+            @can('category-create')
+            <button onclick="openModal()" 
+                class="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-6 rounded-xl shadow-md shadow-blue-500/10 transition duration-200 text-sm w-full md:w-auto mt-2 md:mt-0 outline-none">
+                Add Category
+            </button> 
+            @endcan
+        </div>
 
-        <!-- Add Category Button -->
-        @can('category-create')
-        <button onclick="openModal()" 
-            class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition duration-300">
-            Add Category
-        </button> 
-        @endcan
-    </div>
+        <!-- Success Toast -->
+        @if(session('success'))
+        <div id="successToast" class="fixed top-20 right-6 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl z-50 opacity-0 transform translate-y-4 transition-all duration-500 flex items-center gap-2 text-sm border border-slate-800">
+            <span class="text-emerald-400">✓</span>
+            {{ session('success') }}
+        </div>
+        @endif
 
-    <!-- Success Toast -->
-    @if(session('success'))
-    <div id="successToast" class="fixed top-16 right-6 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 opacity-0 transform translate-y-4 transition-all duration-500">
-        {{ session('success') }}
-    </div>
-    @endif
-
-    @can('category-list')
-    <!-- Desktop Table -->
-    <div class="hidden md:block overflow-x-auto">
-        <table class="min-w-full text-left border-collapse shadow-md rounded-xl overflow-hidden">
-            <thead class="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-                <tr>
-                    <th class="py-3 px-4">Category Name</th>
-                    <th class="py-3 px-4">Products</th>
-                    <th class="py-3 px-4 text-center">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($categories as $category)
-                <tr class="border-b hover:bg-gray-50 transition duration-150 text-center">
-                    <td class="py-3 px-4">
-                        <a href="{{ route('categories.show', $category->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
-                            {{ $category->name }}
-                        </a>
-                    </td>
-                    <td class="py-3 px-4">{{ $category->products->count() }}</td>
-                    <td class="py-3 px-4 flex justify-center items-center gap-2">
-                        @can('category-edit')
-                        <button onclick="openEditModal({{ $category->id }}, '{{ $category->name }}')" class="text-blue-500 hover:text-blue-700 transition duration-200">
-                            <x-far-edit class="h-5 w-5" />
-                        </button>
-                        @endcan
-                        @can('category-delete')
-                        <form action="{{ route('categories.destroy', $category->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this category?')" class="inline-flex items-center">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-red-500 hover:text-red-700 transition duration-200">
-                                <x-gmdi-delete class="h-5 w-5" />
+        @can('category-list')
+        <!-- Desktop Table -->
+        <div class="hidden md:block overflow-hidden border border-slate-100 rounded-xl">
+            <table class="min-w-full text-left border-collapse">
+                <thead class="bg-slate-50/75 border-b border-slate-100 text-slate-500 uppercase text-xs font-bold tracking-wider">
+                    <tr>
+                        <th class="py-3.5 px-4 font-semibold">Category Name</th>
+                        <th class="py-3.5 px-4 font-semibold">Products</th>
+                        <th class="py-3.5 px-4 font-semibold text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 text-sm">
+                    @foreach($categories as $category)
+                    <tr class="hover:bg-slate-50/30 transition duration-150">
+                        <td class="py-4 px-4 font-semibold text-slate-900">
+                            <a href="{{ route('categories.show', $category->id) }}" class="hover:text-slate-700 hover:underline transition">
+                                {{ $category->name }}
+                            </a>
+                        </td>
+                        <td class="py-4 px-4 text-slate-600 font-medium">{{ $category->products->count() }}</td>
+                        <td class="py-4 px-4 flex justify-center items-center gap-3">
+                            @can('category-edit')
+                            <button onclick="openEditModal({{ $category->id }}, '{{ $category->name }}')" class="text-slate-400 hover:text-slate-900 transition-colors duration-200">
+                                <x-far-edit class="h-4.5 w-4.5" />
                             </button>
-                        </form>
-                        @endcan
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+                            @endcan
+                            @can('category-delete')
+                            <form action="{{ route('categories.destroy', $category->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this category?')" class="inline-flex items-center">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-slate-400 hover:text-rose-600 transition-colors duration-200">
+                                    <x-gmdi-delete class="h-5 w-5" />
+                                </button>
+                            </form>
+                            @endcan
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
 
     <!-- Mobile Card View -->
     <div class="md:hidden space-y-4">
@@ -129,11 +132,11 @@
             @csrf
             <div>
                 <label class="block text-gray-700 font-medium">Category Name:</label>
-                <input type="text" name="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none shadow-sm" required>
+                <input type="text" name="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none shadow-sm" required>
             </div>
-            <div class="flex justify-between">
-                <button type="submit" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-2 px-4 rounded-full shadow-md transition duration-200">Save</button>
-                <button type="button" onclick="closeModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-full transition duration-200">Cancel</button>
+            <div class="flex justify-between mt-4">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-xl shadow-md shadow-blue-500/10 transition duration-200">Save</button>
+                <button type="button" onclick="closeModal()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-5 rounded-xl transition duration-200">Cancel</button>
             </div>
         </form>
     </div>
@@ -148,11 +151,11 @@
             @method('PUT')
             <div>
                 <label class="block text-gray-700 font-medium">Category Name:</label>
-                <input type="text" name="name" id="editCategoryName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none shadow-sm" required>
+                <input type="text" name="name" id="editCategoryName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none shadow-sm" required>
             </div>
-            <div class="flex justify-between">
-                <button type="submit" class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-2 px-4 rounded-full shadow-md transition duration-200">Save Changes</button>
-                <button type="button" onclick="closeEditModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-full transition duration-200">Cancel</button>
+            <div class="flex justify-between mt-4">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-5 rounded-xl shadow-md shadow-blue-500/10 transition duration-200">Save Changes</button>
+                <button type="button" onclick="closeEditModal()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-5 rounded-xl transition duration-200">Cancel</button>
             </div>
         </form>
     </div>

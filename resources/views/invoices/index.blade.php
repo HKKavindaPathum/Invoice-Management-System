@@ -11,7 +11,7 @@
                 <input 
                     type="text" 
                     name="search" 
-                    class="w-full px-4 py-2.5 border border-slate-200 rounded-l-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition duration-200 text-sm"
+                    class="w-full px-4 py-2.5 border border-slate-200 rounded-l-xl focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition duration-200 text-sm"
                     placeholder="Search by Client Name" 
                     value="{{ request()->get('search') }}">
 
@@ -27,18 +27,12 @@
                     </button>
                 @endif  
 
-                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-6 rounded-r-xl shadow-sm transition duration-200 text-sm outline-none">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-6 rounded-r-xl shadow-sm transition duration-200 text-sm outline-none">
                     Search
                 </button>
             </form>
 
-            <!-- Add Invoice Button -->
-            @can('invoice-create')
-            <a href="{{ route('invoices.create') }}" 
-                class="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-6 rounded-xl shadow-md shadow-indigo-600/10 transition duration-200 text-sm w-full md:w-auto mt-2 md:mt-0">
-                Add Invoice
-            </a>
-            @endcan
+
         </div>
 
         <!-- Success Toast -->
@@ -66,8 +60,8 @@
                 <tbody class="divide-y divide-slate-100 text-sm">
                     @foreach($invoices as $invoice)
                     <tr class="hover:bg-slate-50/30 transition duration-150">
-                        <td class="py-4 px-4 font-semibold text-indigo-600">
-                            <a href="{{ route('invoices.show', $invoice->id) }}" class="hover:text-indigo-855 transition">
+                        <td class="py-4 px-4 font-semibold text-slate-900">
+                            <a href="{{ route('invoices.show', $invoice->id) }}" class="hover:text-slate-700 hover:underline transition">
                                 #{{ $invoice->id }}
                             </a>
                         </td>
@@ -79,24 +73,22 @@
                         <td class="py-4 px-4">
                             @switch(strtolower($invoice->status))
                                 @case('paid')
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100/50">{{ ucfirst($invoice->status) }}</span>
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-50 text-green-700 border border-green-200/50">{{ ucfirst($invoice->status) }}</span>
                                     @break
                                 @case('unpaid')
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-100/50">{{ ucfirst($invoice->status) }}</span>
-                                    @break
-                                @case('partially paid')
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-100/50">{{ ucfirst($invoice->status) }}</span>
+                                @case('partially_paid')
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-orange-50 text-orange-700 border border-orange-200/50">{{ ucfirst($invoice->status) }}</span>
                                     @break
                                 @case('overdue')
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-orange-50 text-orange-700 border border-orange-100/50">{{ ucfirst($invoice->status) }}</span>
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200/50">{{ ucfirst($invoice->status) }}</span>
                                     @break
                                 @default
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-50 text-slate-600 border border-slate-100/50">{{ ucfirst($invoice->status) }}</span>
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-50 text-slate-650 border border-slate-200/50">{{ ucfirst($invoice->status) }}</span>
                             @endswitch
                         </td>
                         <td class="py-4 px-4 flex justify-center items-center gap-3">
                             @can('invoice-edit')
-                            <a href="{{ route('invoices.edit', $invoice->id) }}" class="text-slate-400 hover:text-indigo-600 transition-colors duration-200" title="Edit">
+                            <a href="{{ route('invoices.edit', $invoice->id) }}" class="text-slate-400 hover:text-slate-900 transition-colors duration-200" title="Edit">
                                 <x-far-edit class="h-4.5 w-4.5" />
                             </a>
                             @endcan
@@ -112,7 +104,7 @@
                             @endcan
 
                             @can('invoice-download')
-                            <a href="{{ route('invoices.download', $invoice->id) }}" class="text-slate-400 hover:text-emerald-600 transition-colors duration-200" title="Download">
+                            <a href="{{ route('invoices.download', $invoice->id) }}" class="text-slate-400 hover:text-slate-900 transition-colors duration-200" title="Download">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                 </svg>
@@ -139,7 +131,7 @@
             <div class="bg-white border border-slate-100 rounded-2xl p-5 shadow-[0_2px_8px_rgba(0,0,0,0.01)] flex flex-col gap-4">
                 <div class="flex justify-between items-start">
                     <div>
-                        <a href="{{ route('invoices.show', $invoice->id) }}" class="font-bold text-indigo-600 hover:text-indigo-850 transition">
+                        <a href="{{ route('invoices.show', $invoice->id) }}" class="font-bold text-blue-600 hover:text-blue-800 transition">
                             Invoice #{{ $invoice->id }}
                         </a>
                         <div class="text-slate-700 font-medium text-sm mt-1">
@@ -150,19 +142,17 @@
                     <div>
                         @switch(strtolower($invoice->status))
                             @case('paid')
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">{{ ucfirst($invoice->status) }}</span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-green-50 text-green-700 border border-green-200/50">{{ ucfirst($invoice->status) }}</span>
                                 @break
                             @case('unpaid')
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-100">{{ ucfirst($invoice->status) }}</span>
-                                @break
-                            @case('partially paid')
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-100">{{ ucfirst($invoice->status) }}</span>
+                            @case('partially_paid')
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-orange-50 text-orange-700 border border-orange-200/50">{{ ucfirst($invoice->status) }}</span>
                                 @break
                             @case('overdue')
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-orange-50 text-orange-700 border border-orange-100">{{ ucfirst($invoice->status) }}</span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200/50">{{ ucfirst($invoice->status) }}</span>
                                 @break
                             @default
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-50 text-slate-700 border border-slate-100">{{ ucfirst($invoice->status) }}</span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-50 text-slate-650 border border-slate-200/50">{{ ucfirst($invoice->status) }}</span>
                         @endswitch
                     </div>
                 </div>
@@ -170,7 +160,7 @@
                     <div class="text-slate-900 font-extrabold text-base">{{ $invoice->final_amount }}</div>
                     <div class="flex gap-3">
                         @can('invoice-edit')
-                        <a href="{{ route('invoices.edit', $invoice->id) }}" class="text-slate-400 hover:text-indigo-600 transition duration-200">
+                        <a href="{{ route('invoices.edit', $invoice->id) }}" class="text-slate-400 hover:text-slate-900 transition duration-200">
                             <x-far-edit class="h-5 w-5" />
                         </a>
                         @endcan
@@ -186,7 +176,7 @@
                         @endcan
 
                         @can('invoice-download')
-                        <a href="{{ route('invoices.download', $invoice->id) }}" class="text-slate-400 hover:text-emerald-600 transition duration-200">
+                        <a href="{{ route('invoices.download', $invoice->id) }}" class="text-slate-400 hover:text-slate-900 transition duration-200">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                             </svg>
@@ -194,7 +184,7 @@
                         @endcan
 
                         @can('invoice-print')
-                        <button onclick="printInvoice('{{ $invoice->id }}')" class="text-slate-400 hover:text-purple-600 transition duration-200">
+                        <button onclick="printInvoice('{{ $invoice->id }}')" class="text-slate-400 hover:text-slate-900 transition duration-200">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                             </svg>

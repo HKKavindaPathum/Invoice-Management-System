@@ -32,6 +32,13 @@
                             @endforeach
                         </select>
                     </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+                        <input type="number" name="quantity" min="0" required 
+                               class="w-full max-w-md border border-gray-300 p-2 rounded-md focus:ring-2 focus:ring-blue-300 focus:border-blue-500 outline-none transition"
+                               value="{{ old('quantity', $product->quantity) }}">
+                    </div>
                 </div>
 
                 <!-- Right Column -->

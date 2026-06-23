@@ -14,6 +14,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PermissionSeeder::class, // Create all permissions first
             AdminUserSeeder::class,  // Then create admin user and assign permissions
+            SettingSeeder::class,    // Seed company settings
+            ExampleDataSeeder::class, // Populate example data for invoicing
         ]);
     }
 }

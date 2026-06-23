@@ -43,6 +43,7 @@ class ProductController extends Controller
                 'name' => 'required|string|max:255|unique:products,name,NULL,id,category_id,' . $request->category_id,
                 'category_id' => 'required|exists:categories,id',
                 'unit_price' => 'required|numeric',
+                'quantity' => 'required|integer|min:0',
                 'description' => 'nullable|string',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,webp',
             ], [
@@ -70,6 +71,7 @@ class ProductController extends Controller
                 'name' => $request->name,
                 'category_id' => $request->category_id,
                 'unit_price' => $request->unit_price,
+                'quantity' => $request->quantity,
                 'description' => $request->description,
                 'image' => $imagePath,  //Set to NULL if no image uploaded
             ]);
@@ -114,36 +116,38 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'unit_price' => 'required|numeric',
+            'quantity' => 'required|integer|min:0',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp',
         ]);
-
+ 
         $product = Product::findOrFail($id); // Fetch the product by ID
-
+ 
         // Default to the existing image path
         $imagePath = $product->image;
-
+ 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extension;
             $path = 'uploads/product/';
             $file->move($path, $filename);
-
+ 
             // Delete the old image if it exists
             if (File::exists($product->image)) {
                 File::delete($product->image);
             }
-
+ 
             // Update image path
             $imagePath = $path . $filename;
         }
-
+ 
         // Update Product
         $product->update([
             'name' => $request->name,
             'category_id' => $request->category_id,
             'unit_price' => $request->unit_price,
+            'quantity' => $request->quantity,
             'description' => $request->description,
             'image' => $imagePath, // Use the existing image if no new image is uploaded
         ]);

@@ -6,10 +6,12 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\StockController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -41,6 +43,20 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy')->middleware('permission:product-delete');
     Route::get('products/{id}', [ProductController::class, 'show'])->name('products.show')->middleware('permission:product-list');
 
+    //stock-handle
+    Route::get('/stock-handle', [StockController::class, 'index'])->name('stock.index')->middleware('permission:product-edit');
+    Route::post('/stock-handle', [StockController::class, 'update'])->name('stock.update')->middleware('permission:product-edit');
+
+    //services
+    Route::get('/services', [ServiceController::class, 'index'])->name('services.index')->middleware('permission:service-list');
+    Route::get('/services/create', [ServiceController::class, 'create'])->name('services.create')->middleware('permission:service-create');
+    Route::post('/services', [ServiceController::class, 'store'])->name('services.store')->middleware('permission:service-create');
+    Route::get('services/search', [ServiceController::class, 'search'])->name('services.search')->middleware('permission:service-list');
+    Route::get('/services/{id}/edit', [ServiceController::class, 'edit'])->name('services.edit')->middleware('permission:service-edit');
+    Route::put('/services/{id}', [ServiceController::class, 'update'])->name('services.update')->middleware('permission:service-edit');
+    Route::delete('/services/{id}', [ServiceController::class, 'destroy'])->name('services.destroy')->middleware('permission:service-delete');
+    Route::get('services/{id}', [ServiceController::class, 'show'])->name('services.show')->middleware('permission:service-list');
+
     //clients
     Route::get('/clients', [ClientController::class, 'index'])->name('clients.index')->middleware('permission:client-list');
     Route::get('client/create',[ClientController::class,'create'])->name('clients.create')->middleware('permission:client-create');
@@ -55,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index')->middleware('permission:invoice-list');
     Route::get('invoices/create',[InvoiceController::class,'create'])->name('invoices.create')->middleware('permission:invoice-create');
     Route::get('/product-price/{id}', [InvoiceController::class, 'getProductPrice']);
+    Route::get('/service-price/{id}', [InvoiceController::class, 'getServicePrice']);
     Route::post('/invoices', [InvoiceController::class, 'store'])->name('invoices.store')->middleware('permission:invoice-create');
     Route::get('invoices/search', [InvoiceController::class, 'search'])->name('invoices.search')->middleware('permission:invoice-list');
     Route::get('invoices/filter', [InvoiceController::class, 'filterInvoices'])->name('invoices.filter')->middleware('permission:invoice-list');

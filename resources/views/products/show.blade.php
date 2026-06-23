@@ -27,7 +27,7 @@
                         <label class="block text-sm font-semibold text-gray-600 mb-1">Product Image</label>
                         @if($product->image)
                             <div class="bg-gray-50 p-6 rounded-lg shadow-sm flex justify-center">
-                                <img src="{{ asset('storage/' . $product->image) }}" alt="Product Image" class="w-64 h-64 object-cover rounded-lg shadow-lg">
+                                <img src="{{ asset($product->image) }}" alt="Product Image" class="w-64 h-64 object-cover rounded-lg shadow-lg">
                             </div>
                         @else
                             <div>
@@ -43,6 +43,25 @@
                     <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
                         <label class="block text-sm font-semibold text-gray-600 mb-1">Price</label>
                         <p class="text-lg font-medium text-gray-800">RS: {{ number_format($product->unit_price, 2) }}</p>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                        <label class="block text-sm font-semibold text-gray-600 mb-1">Stock Quantity</label>
+                        <p class="text-lg font-medium text-gray-800">
+                            @if($product->quantity >= 5)
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-50 text-green-700 border border-green-200">
+                                    In Stock ({{ $product->quantity }})
+                                </span>
+                            @elseif($product->quantity > 0)
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-orange-50 text-orange-700 border border-orange-200">
+                                    Low Stock ({{ $product->quantity }})
+                                </span>
+                            @else
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-red-50 text-red-700 border border-red-200">
+                                    Out of Stock
+                                </span>
+                            @endif
+                        </p>
                     </div>
 
                     <div class="bg-gray-50 p-4 rounded-lg shadow-sm">

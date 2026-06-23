@@ -7,6 +7,10 @@
 @layer base {
     body {
         font-family: 'Outfit', sans-serif;
-        @apply bg-slate-50 text-slate-800 antialiased;
+        @apply bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 antialiased transition-colors duration-300;
     }
+}
+
+[x-cloak] {
+    display: none !important;
 }

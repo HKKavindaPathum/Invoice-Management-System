@@ -11,7 +11,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -46,16 +45,6 @@ Route::middleware(['auth'])->group(function () {
     //stock-handle
     Route::get('/stock-handle', [StockController::class, 'index'])->name('stock.index')->middleware('permission:product-edit');
     Route::post('/stock-handle', [StockController::class, 'update'])->name('stock.update')->middleware('permission:product-edit');
-
-    //services
-    Route::get('/services', [ServiceController::class, 'index'])->name('services.index')->middleware('permission:service-list');
-    Route::get('/services/create', [ServiceController::class, 'create'])->name('services.create')->middleware('permission:service-create');
-    Route::post('/services', [ServiceController::class, 'store'])->name('services.store')->middleware('permission:service-create');
-    Route::get('services/search', [ServiceController::class, 'search'])->name('services.search')->middleware('permission:service-list');
-    Route::get('/services/{id}/edit', [ServiceController::class, 'edit'])->name('services.edit')->middleware('permission:service-edit');
-    Route::put('/services/{id}', [ServiceController::class, 'update'])->name('services.update')->middleware('permission:service-edit');
-    Route::delete('/services/{id}', [ServiceController::class, 'destroy'])->name('services.destroy')->middleware('permission:service-delete');
-    Route::get('services/{id}', [ServiceController::class, 'show'])->name('services.show')->middleware('permission:service-list');
 
     //clients
     Route::get('/clients', [ClientController::class, 'index'])->name('clients.index')->middleware('permission:client-list');

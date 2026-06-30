@@ -44,37 +44,6 @@
                 </div>
             </div>
 
-            <!-- Services Listing -->
-            @if($invoice->serviceInvoices->count() > 0)
-            <div class="mt-6">
-                <h3 class="text-md font-bold text-slate-700 uppercase tracking-wider">Services</h3>
-                <div class="overflow-x-auto border border-slate-100 rounded-xl mt-2">
-                    <table class="min-w-full text-left border-collapse">
-                        <thead class="bg-slate-50 text-slate-500 uppercase text-xs font-bold tracking-wider">
-                            <tr>
-                                <th class="py-3 px-4">Service</th>
-                                <th class="py-3 px-4">Rate</th>
-                                <th class="py-3 px-4">Qty</th>
-                                <th class="py-3 px-4">Days</th>
-                                <th class="py-3 px-4 text-right">Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100 text-sm">
-                            @foreach($invoice->serviceInvoices as $svc)
-                            <tr class="hover:bg-slate-50/50">
-                                <td class="py-3.5 px-4 font-medium text-slate-900">{{ $svc->service->name }}</td>
-                                <td class="py-3.5 px-4 text-slate-600">RS: {{ number_format($svc->service->unit_price, 2) }}</td>
-                                <td class="py-3.5 px-4 text-slate-600">{{ $svc->quantity }}</td>
-                                <td class="py-3.5 px-4 text-slate-600">{{ $svc->days }}</td>
-                                <td class="py-3.5 px-4 text-right font-semibold text-slate-800">RS: {{ number_format($svc->amount, 2) }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            @endif
-
             <!-- Products Listing -->
             @if($invoice->productInvoices->count() > 0)
             <div class="mt-6">

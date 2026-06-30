@@ -203,35 +203,6 @@
             </div>
         </div>
 
-        <!-- Services Table -->
-        @if($invoice->serviceInvoices->count() > 0)
-        <div>
-            <div class="section-title">Services</div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Service</th>
-                        <th>Rate</th>
-                        <th>Qty</th>
-                        <th>Days</th>
-                        <th class="text-right">Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($invoice->serviceInvoices as $svc)
-                    <tr>
-                        <td>{{ $svc->service->name }}</td>
-                        <td>RS: {{ number_format($svc->service->unit_price, 2) }}</td>
-                        <td>{{ $svc->quantity }}</td>
-                        <td>{{ $svc->days }}</td>
-                        <td class="text-right">RS: {{ number_format($svc->amount, 2) }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-        @endif
-
         <!-- Products Table -->
         @if($invoice->productInvoices->count() > 0)
         <div>

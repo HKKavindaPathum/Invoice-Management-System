@@ -5,11 +5,9 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\Service;
 use App\Models\Client;
 use App\Models\Invoice;
 use App\Models\ProductInvoice;
-use App\Models\ServiceInvoice;
 use Carbon\Carbon;
 
 class ExampleDataSeeder extends Seeder
@@ -95,51 +93,12 @@ class ExampleDataSeeder extends Seeder
                     'category_id' => $cat->id,
                     'unit_price' => $p['price'],
                     'description' => $p['desc'],
-                    'quantity' => rand(10, 50), // Seeding initial stocks
                     'image' => null,
                 ]
             );
         }
 
-        // 3. Create 15 Mobile Shop Services (Repairs, installations, configuration, support plans)
-        $servicesData = [
-            // Repair Services (Category Index 6)
-            ['name' => 'iPhone Screen Replacement Service', 'category_idx' => 6, 'price' => 45000.00, 'desc' => 'High-quality OEM display replacement.'],
-            ['name' => 'Samsung Screen Replacement Service', 'category_idx' => 6, 'price' => 38000.00, 'desc' => 'Original AMOLED display repair.'],
-            ['name' => 'Smart Watch Glass Repair', 'category_idx' => 6, 'price' => 22000.00, 'desc' => 'Outer glass replacement for smart watches.'],
-            ['name' => 'iPhone Battery Replacement Service', 'category_idx' => 6, 'price' => 18000.00, 'desc' => 'Premium battery replacement with warranty.'],
-            ['name' => 'Samsung Battery Replacement Service', 'category_idx' => 6, 'price' => 14000.00, 'desc' => 'OEM battery repair service.'],
-            ['name' => 'Charging Port Repair Service', 'category_idx' => 6, 'price' => 9500.00, 'desc' => 'Replacement of loose or damaged charging ports.'],
-            ['name' => 'Water Damage Diagnostic Service', 'category_idx' => 6, 'price' => 5000.00, 'desc' => 'Full diagnostic test and ultrasonic cleaning.'],
-            ['name' => 'Camera Lens Glass Replacement', 'category_idx' => 6, 'price' => 7500.00, 'desc' => 'Repair of cracked outer camera glass.'],
-
-            // Setup & Support Services (Category Index 7)
-            ['name' => 'Device Initial Setup & Data Transfer', 'category_idx' => 7, 'price' => 4000.00, 'desc' => 'Transfer apps, contacts, photos, and settings to new phone.'],
-            ['name' => 'OS Re-flashing & Software Recovery', 'category_idx' => 7, 'price' => 6000.00, 'desc' => 'Fix boot loops, bricked phones, and software bugs.'],
-            ['name' => 'Device Deep Cleaning & Port Servicing', 'category_idx' => 7, 'price' => 2500.00, 'desc' => 'Remove lint from speaker grids and ports.'],
-            ['name' => 'Tempered Glass Installation Service', 'category_idx' => 7, 'price' => 1000.00, 'desc' => 'Professional dust-free screen protector application.'],
-
-            // Warranty & Care Plans (Category Index 8)
-            ['name' => '1-Year Extended Warranty Plan', 'category_idx' => 8, 'price' => 28000.00, 'desc' => 'Covers manufacturing hardware defects for another 12 months.'],
-            ['name' => 'Accidental Damage Screen Care Plan', 'category_idx' => 8, 'price' => 35000.00, 'desc' => 'One free screen replacement within 1 year.'],
-            ['name' => 'Express Replacement Service Swap', 'category_idx' => 8, 'price' => 15000.00, 'desc' => 'Get a loaner device while your phone is being repaired.'],
-        ];
-
-        $services = [];
-        foreach ($servicesData as $s) {
-            $cat = $categories[$s['category_idx']];
-            $services[] = Service::firstOrCreate(
-                ['name' => $s['name'], 'category_id' => $cat->id],
-                [
-                    'name' => $s['name'],
-                    'category_id' => $cat->id,
-                    'unit_price' => $s['price'],
-                    'description' => $s['desc'],
-                ]
-            );
-        }
-
-        // 4. Create 30 Mobile Shop Customers (Clients)
+        // 3. Create 30 Mobile Shop Customers (Clients)
         $firstNames = [
             'John', 'Robert', 'David', 'James', 'Michael', 'William', 'Thomas', 'Charles', 'Daniel', 'Richard',
             'Emma', 'Olivia', 'Sophia', 'Jane', 'Mary', 'Patricia', 'Linda', 'Elizabeth', 'Sarah', 'Jessica',
@@ -180,7 +139,7 @@ class ExampleDataSeeder extends Seeder
             );
         }
 
-        // 5. Create 50 Invoices
+        // 4. Create 50 Invoices
         $invoiceStatuses = ['paid', 'unpaid', 'partially_paid', 'overdue', 'processing'];
         $today = Carbon::now();
 
@@ -216,23 +175,7 @@ class ExampleDataSeeder extends Seeder
 
             $totalAmount = 0;
 
-            // Select 0 to 2 random services (Repairs, installation, setup)
-            $selectedServices = collect($services)->random(rand(0, 2));
-            foreach ($selectedServices as $svc) {
-                $qty = 1;
-                $days = 1;
-                $amount = $svc->unit_price * $qty * $days;
-
-                ServiceInvoice::create([
-                    'invoice_id' => $invoice->id,
-                    'service_id' => $svc->id,
-                    'quantity' => $qty,
-                    'days' => $days,
-                    'amount' => $amount,
-                ]);
-
-                $totalAmount += $amount;
-            }
+            
 
             // Select 1 to 3 random products (phones, cases, power adapters)
             $selectedProducts = collect($products)->random(rand(1, 3));
@@ -251,8 +194,6 @@ class ExampleDataSeeder extends Seeder
 
                 $totalAmount += $amount;
 
-                // Decrement product stock in example seeder to keep it realistic
-                $prod->decrement('quantity', $qty);
             }
 
             // Apply discount

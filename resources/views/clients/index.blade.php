@@ -131,6 +131,13 @@
         @endforeach
     </div>
     @endcan
+
+    {{-- Pagination --}}
+    @if($clients->hasPages())
+        <div class="mt-6 px-2">
+            {{ $clients->links() }}
+        </div>
+    @endif
 </div>
 @endsection
 

@@ -13,7 +13,7 @@ class ProductController extends Controller
     //Display all products
     public function index()
     {
-        $products = Product::all();
+        $products = Product::with('category')->latest()->paginate(15);
         return view('products.index', compact('products'));
     }
 
@@ -91,11 +91,14 @@ class ProductController extends Controller
     {
         $search = $request->get('search');
             
-        // If a search term is provided, filter categories by name
+        // If a search term is provided, filter products by name
         if ($search) {
-            $products = Product::where('name', 'like', '%' . $search . '%')->get();
+            $products = Product::with('category')
+                ->where('name', 'like', '%' . $search . '%')
+                ->latest()
+                ->paginate(15);
         } else {
-            $products = Product::all();
+            $products = Product::with('category')->latest()->paginate(15);
         }
     
         return view('products.index', compact('products'));

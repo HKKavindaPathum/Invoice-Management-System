@@ -12,28 +12,34 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        //Fetch totals for the dashboard
-        $totalClients = Client::count();
+        // Single query for all invoice status counts (replaces 7 separate queries)
+        $statusCounts = Invoice::selectRaw('status, count(*) as count, sum(final_amount) as total')
+            ->groupBy('status')
+            ->get()
+            ->keyBy('status');
+
+        $paid           = (int) optional($statusCounts->get('paid'))->count;
+        $unpaid         = (int) optional($statusCounts->get('unpaid'))->count;
+        $partiallyPaid  = (int) optional($statusCounts->get('partially_paid'))->count;
+        $overdue        = (int) optional($statusCounts->get('overdue'))->count;
+        $processing     = (int) optional($statusCounts->get('processing'))->count;
+
+        $totalInvoices      = $statusCounts->sum('count');
+        $totalPaidInvoices  = $paid;
+        $totalUnpaidInvoices = $unpaid;
+        $totalIncome        = optional($statusCounts->get('paid'))->total ?? 0;
+
+        // Other totals
+        $totalClients    = Client::count();
         $totalCategories = Category::count();
-        $totalInvoices = Invoice::count();
-        $totalPaidInvoices = Invoice::where('status', 'paid')->count();
-        $totalUnpaidInvoices = Invoice::where('status', 'unpaid')->count();
-        $totalIncome = Invoice::where('status', 'paid')->sum('final_amount');
-        $totalProducts = Product::count();
+        $totalProducts   = Product::count();
 
-        //Pie chart
-        $paid = Invoice::where('status', 'paid')->count();
-        $unpaid = Invoice::where('status', 'unpaid')->count();
-        $partiallyPaid = Invoice::where('status', 'partially_paid')->count();
-        $overdue = Invoice::where('status', 'overdue')->count();
-        $processing = Invoice::where('status', 'processing')->count();
-
-        //Calculate percentages
-        $paidPercent = ($totalInvoices > 0) ? number_format(($paid / $totalInvoices) * 100, 2) : 0;
-        $unpaidPercent = ($totalInvoices > 0) ? number_format(($unpaid / $totalInvoices) * 100, 2) : 0;
-        $partiallyPaidPercent = ($totalInvoices > 0) ? number_format(($partiallyPaid / $totalInvoices) * 100, 2) : 0;
-        $overduePercent = ($totalInvoices > 0) ? number_format(($overdue / $totalInvoices) * 100, 2) : 0;
-        $processingPercent = ($totalInvoices > 0) ? number_format(($processing / $totalInvoices) * 100, 2) : 0;
+        // Calculate percentages
+        $paidPercent          = $totalInvoices > 0 ? number_format(($paid / $totalInvoices) * 100, 2) : 0;
+        $unpaidPercent        = $totalInvoices > 0 ? number_format(($unpaid / $totalInvoices) * 100, 2) : 0;
+        $partiallyPaidPercent = $totalInvoices > 0 ? number_format(($partiallyPaid / $totalInvoices) * 100, 2) : 0;
+        $overduePercent       = $totalInvoices > 0 ? number_format(($overdue / $totalInvoices) * 100, 2) : 0;
+        $processingPercent    = $totalInvoices > 0 ? number_format(($processing / $totalInvoices) * 100, 2) : 0;
 
         return view('dashboard.index', compact(
             'totalClients',
@@ -43,15 +49,15 @@ class DashboardController extends Controller
             'totalUnpaidInvoices',
             'totalIncome',
             'totalProducts',
-            'paid', 
-            'unpaid', 
-            'partiallyPaid', 
-            'overdue', 
+            'paid',
+            'unpaid',
+            'partiallyPaid',
+            'overdue',
             'processing',
-            'paidPercent', 
-            'unpaidPercent', 
-            'partiallyPaidPercent', 
-            'overduePercent', 
+            'paidPercent',
+            'unpaidPercent',
+            'partiallyPaidPercent',
+            'overduePercent',
             'processingPercent'
         ));
     }

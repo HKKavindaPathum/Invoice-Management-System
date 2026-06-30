@@ -59,7 +59,6 @@
                         <th class="py-3.5 px-4 font-semibold">Product Name</th>
                         <th class="py-3.5 px-4 font-semibold">Category</th>
                         <th class="py-3.5 px-4 font-semibold">Price</th>
-                        <th class="py-3.5 px-4 font-semibold">Stock</th>
                         <th class="py-3.5 px-4 font-semibold text-center">Actions</th>
                     </tr>
                 </thead>
@@ -76,21 +75,6 @@
                         </td>
                         <td class="py-4 px-4 text-slate-600 font-medium">{{ $product->category->name }}</td>
                         <td class="py-4 px-4 font-semibold text-slate-800">RS: {{ $product->unit_price }}</td>
-                        <td class="py-4 px-4">
-                            @if($product->quantity >= 5)
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-50 text-green-700 border border-green-200/50">
-                                    In Stock ({{ $product->quantity }})
-                                </span>
-                            @elseif($product->quantity > 0)
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-orange-50 text-orange-700 border border-orange-200/50">
-                                    Low Stock ({{ $product->quantity }})
-                                </span>
-                            @else
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200/50">
-                                    Out of Stock
-                                </span>
-                            @endif
-                        </td>
                         <td class="py-4 px-4 flex justify-center items-center gap-3">
                             @can('product-edit')
                             <a href="{{ route('products.edit', $product->id) }}" class="text-slate-400 hover:text-slate-900 transition-colors duration-200">
@@ -163,6 +147,13 @@
         @endforeach
     </div>
     @endcan
+
+    {{-- Pagination --}}
+    @if($products->hasPages())
+        <div class="mt-6 px-2">
+            {{ $products->links() }}
+        </div>
+    @endif
 </div>
 @endsection
 

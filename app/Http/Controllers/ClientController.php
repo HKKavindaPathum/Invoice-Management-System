@@ -10,7 +10,7 @@ class ClientController extends Controller
 {
     public function index()
     {
-        $clients = Client::withCount('invoices')->get();
+        $clients = Client::withCount('invoices')->latest()->paginate(15);
         return view('clients.index', compact('clients'));
     }
 
@@ -61,9 +61,15 @@ class ClientController extends Controller
         $search = $request->get('search');
             
         if ($search) {
-            $clients = Client::where('first_name', 'like', '%' . $search . '%')->get();
+            $clients = Client::withCount('invoices')
+                ->where(function($q) use ($search) {
+                    $q->where('first_name', 'like', '%' . $search . '%')
+                      ->orWhere('last_name', 'like', '%' . $search . '%');
+                })
+                ->latest()
+                ->paginate(15);
         } else {
-            $clients = Client::all();
+            $clients = Client::withCount('invoices')->latest()->paginate(15);
         }
     
         return view('clients.index', compact('clients'));

@@ -63,13 +63,8 @@
             </div>
         </div>
 
-        <!-- Services Section -->
-        <div class="space-y-4 pt-4 border-t border-slate-100">
-            <h3 class="text-md font-bold text-slate-700 uppercase tracking-wider">Services</h3>
-            <div id="services-container" class="space-y-3">
-                @if($invoice->serviceInvoices->count() > 0)
-                    @foreach($invoice->serviceInvoices as $index => $serviceInvoice)
-                    <div class="service-item border border-slate-150 p-4 rounded-2xl bg-slate-50/50">
+        <!-- Products Section -->
+
                         <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
                             <div class="md:col-span-4 space-y-1">
                                 <label class="block text-xs font-semibold text-slate-500">Service Description</label>
@@ -370,31 +365,6 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        // Fetch unit price on service selection
-        $(document).on("change", ".service-select", function() {
-            let row = $(this).closest(".service-item");
-            let serviceId = $(this).val();
-            let unitPriceField = row.find(".unit-price");
-
-            if (serviceId) {
-                $.ajax({
-                    url: "/service-price/" + serviceId,
-                    type: "GET",
-                    success: function(response) {
-                        unitPriceField.val(response.unit_price);
-                        updateRowAmount(row);
-                    },
-                    error: function() {
-                        unitPriceField.val("0");
-                        updateRowAmount(row);
-                    }
-                });
-            } else {
-                unitPriceField.val("0");
-                updateRowAmount(row);
-            }
-        });
-
         // Fetch unit price on product selection
         $(document).on("change", ".product-select", function() {
             let row = $(this).closest(".product-item");
@@ -417,61 +387,6 @@
             } else {
                 unitPriceField.val("0");
                 updateRowAmount(row);
-            }
-        });
-
-        // Add new service row
-        $("#add-service").click(function() {
-            let newService = $(".service-item:first").clone();
-            let index = $(".service-item").length;
-
-            newService.find("input").val("");
-            newService.find("select").val("");
-            newService.find(".unit-price, .amount").val("0");
-            newService.find(".quantity, .days").val("1");
-
-            newService.find('[name^="services["]').each(function() {
-                let name = $(this).attr("name");
-                name = name.replace(/services\[\d+\]/, `services[${index}]`);
-                $(this).attr("name", name);
-            });
-
-            newService.hide().appendTo("#services-container").fadeIn(200);
-        });
-
-        // Add new product row
-        $("#add-product").click(function() {
-            let newProduct = $(".product-item:first").clone();
-            let index = $(".product-item").length;
-
-            newProduct.find("input").val("");
-            newProduct.find("select").val("");
-            newProduct.find(".unit-price, .amount").val("0");
-            newProduct.find(".quantity, .days").val("1");
-
-            newProduct.find('[name^="products["]').each(function() {
-                let name = $(this).attr("name");
-                name = name.replace(/products\[\d+\]/, `products[${index}]`);
-                $(this).attr("name", name);
-            });
-
-            newProduct.hide().appendTo("#products-container").fadeIn(200);
-        });
-
-        // Remove service row
-        $(document).on("click", ".remove-service", function() {
-            let row = $(this).closest(".service-item");
-            if ($(".service-item").length > 1) {
-                row.fadeOut(200, function() {
-                    $(this).remove();
-                    updateTotalAmount();
-                });
-            } else {
-                row.find("input").val("");
-                row.find("select").val("");
-                row.find(".unit-price, .amount").val("0");
-                row.find(".quantity, .days").val("1");
-                updateTotalAmount();
             }
         });
 
@@ -498,7 +413,7 @@
             if (isNaN(val) || val < 1) {
                 $(this).val("1");
             }
-            updateRowAmount($(this).closest(".product-item, .service-item"));
+            updateRowAmount($(this).closest(".product-item"));
         });
 
         function updateRowAmount(row) {

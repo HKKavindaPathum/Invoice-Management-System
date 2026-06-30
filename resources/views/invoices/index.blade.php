@@ -196,6 +196,13 @@
             @endforeach
         </div>
         @endcan
+
+        {{-- Pagination --}}
+        @if($invoices->hasPages())
+            <div class="mt-6">
+                {{ $invoices->links() }}
+            </div>
+        @endif
     </div>
 </div>
 @endsection

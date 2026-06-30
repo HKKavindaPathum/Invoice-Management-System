@@ -6,8 +6,6 @@ use App\Models\Invoice;
 use App\Models\Client;
 use App\Models\Product;
 use App\Models\ProductInvoice;
-use App\Models\Service;
-use App\Models\ServiceInvoice;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -25,7 +23,8 @@ class InvoiceController extends Controller {
             ->when($clientId, function ($query, $clientId) {
                 return $query->where('client_id', $clientId);
             })
-            ->get();
+            ->latest()
+            ->paginate(15);
     
         return view('invoices.index', compact('invoices'));
     }
@@ -33,8 +32,7 @@ class InvoiceController extends Controller {
     public function create() {
         $clients = Client::all();
         $products = Product::all();
-        $services = Service::all();
-        return view('invoices.create', compact('clients', 'products', 'services'));
+        return view('invoices.create', compact('clients', 'products'));
     }
 
     public function getProductPrice($product_id) {
@@ -42,22 +40,14 @@ class InvoiceController extends Controller {
         return response()->json(['unit_price' => $product->unit_price]);
     }
 
-    public function getServicePrice($service_id) {
-        $service = Service::findOrFail($service_id);
-        return response()->json(['unit_price' => $service->unit_price]);
-    }
     public function store(Request $request) {
         // Filter out empty rows from the request inputs first
         $products = array_values(array_filter($request->input('products', []), function($item) {
             return !empty($item['product_id']);
         }));
-        $services = array_values(array_filter($request->input('services', []), function($item) {
-            return !empty($item['service_id']);
-        }));
 
         $request->merge([
             'products' => $products,
-            'services' => $services,
         ]);
 
         // Validate the request
@@ -76,30 +66,14 @@ class InvoiceController extends Controller {
             'products.*.quantity' => 'required|numeric|min:1',
             'products.*.days' => 'required|numeric|min:1',
             'products.*.amount' => 'required|numeric',
-            'services' => 'nullable|array',
-            'services.*.service_id' => 'required|exists:services,id',
-            'services.*.quantity' => 'required|numeric|min:1',
-            'services.*.days' => 'required|numeric|min:1',
-            'services.*.amount' => 'required|numeric',
         ]);
 
-        if (empty($products) && empty($services)) {
+        if (empty($products)) {
             return redirect()->back()
                 ->withInput()
-                ->withErrors(['items' => 'You must add at least one product or service to the invoice.']);
+                ->withErrors(['items' => 'You must add at least one product to the invoice.']);
         }
 
-        // Check stock availability
-        if (!empty($products)) {
-            foreach ($products as $item) {
-                $product = Product::find($item['product_id']);
-                if ($product && $product->quantity < $item['quantity']) {
-                    return redirect()->back()
-                        ->withInput()
-                        ->withErrors(['products' => "The requested quantity for '{$product->name}' exceeds the available stock ({$product->quantity})."]);
-                }
-            }
-        }
  
         // Create the invoice
         $invoice = Invoice::create([
@@ -114,7 +88,7 @@ class InvoiceController extends Controller {
             'note' => $request->note,
         ]);
  
-        // Save product invoices and update stock
+        // Save product invoices 
         if (!empty($products)) {
             foreach ($products as $productData) {
                 ProductInvoice::create([
@@ -125,26 +99,9 @@ class InvoiceController extends Controller {
                     'amount' => $productData['amount'],
                 ]);
 
-                // Deduct stock
-                $product = Product::find($productData['product_id']);
-                if ($product) {
-                    $product->decrement('quantity', $productData['quantity']);
-                }
             }
         }
 
-        // Save service invoices
-        if (!empty($services)) {
-            foreach ($services as $serviceData) {
-                ServiceInvoice::create([
-                    'invoice_id' => $invoice->id,
-                    'service_id' => $serviceData['service_id'],
-                    'quantity' => $serviceData['quantity'],
-                    'days' => $serviceData['days'],
-                    'amount' => $serviceData['amount'],
-                ]);
-            }
-        }
     
         return redirect()->route('invoices.index')->with('success', 'Invoice created successfully.');
     }
@@ -152,12 +109,11 @@ class InvoiceController extends Controller {
 
     public function edit(Invoice $invoice) {
         //Fetch the invoice with its associated client, products and services
-        $invoice->load(['client', 'productInvoices.product', 'serviceInvoices.service']);
+        $invoice->load(['client', 'productInvoices.product']);
         $clients = Client::all();
         $products = Product::all();
-        $services = Service::all();
     
-        return view('invoices.edit', compact('invoice', 'clients', 'products', 'services'));
+        return view('invoices.edit', compact('invoice', 'clients', 'products'));
     }
     
     public function update(Request $request, Invoice $invoice) {
@@ -165,13 +121,9 @@ class InvoiceController extends Controller {
         $products = array_values(array_filter($request->input('products', []), function($item) {
             return !empty($item['product_id']);
         }));
-        $services = array_values(array_filter($request->input('services', []), function($item) {
-            return !empty($item['service_id']);
-        }));
 
         $request->merge([
             'products' => $products,
-            'services' => $services,
         ]);
 
         // Validate the request
@@ -190,46 +142,14 @@ class InvoiceController extends Controller {
             'products.*.quantity' => 'required|numeric|min:1',
             'products.*.days' => 'required|numeric|min:1',
             'products.*.amount' => 'required|numeric',
-            'services' => 'nullable|array',
-            'services.*.service_id' => 'required|exists:services,id',
-            'services.*.quantity' => 'required|numeric|min:1',
-            'services.*.days' => 'required|numeric|min:1',
-            'services.*.amount' => 'required|numeric',
         ]);
 
-        if (empty($products) && empty($services)) {
+        if (empty($products)) {
             return redirect()->back()
                 ->withInput()
-                ->withErrors(['items' => 'You must add at least one product or service to the invoice.']);
+                ->withErrors(['items' => 'You must add at least one product to the invoice.']);
         }
 
-        // Temporarily restore the stock of all current products in this invoice for validation
-        foreach ($invoice->productInvoices as $oldProductInvoice) {
-            $product = Product::find($oldProductInvoice->product_id);
-            if ($product) {
-                $product->increment('quantity', $oldProductInvoice->quantity);
-            }
-        }
-
-        // Check if the new requested stock quantities are available
-        if (!empty($products)) {
-            foreach ($products as $item) {
-                $product = Product::find($item['product_id']);
-                if ($product && $product->quantity < $item['quantity']) {
-                    // Rollback the temporary stock restoration before redirecting back
-                    foreach ($invoice->productInvoices as $oldProductInvoice) {
-                        $productToRevert = Product::find($oldProductInvoice->product_id);
-                        if ($productToRevert) {
-                            $productToRevert->decrement('quantity', $oldProductInvoice->quantity);
-                        }
-                    }
-
-                    return redirect()->back()
-                        ->withInput()
-                        ->withErrors(['products' => "The requested quantity for '{$product->name}' exceeds the available stock ({$product->quantity})."]);
-                }
-            }
-        }
      
         // Update the invoice
         $invoice->update([
@@ -246,9 +166,8 @@ class InvoiceController extends Controller {
      
         // Delete existing product invoices (since stock was already refunded, we don't need to do it again)
         $invoice->productInvoices()->delete();
-        $invoice->serviceInvoices()->delete();
      
-        // Save updated product invoices and deduct new stock quantities
+        // Save updated product invoices
         if (!empty($products)) {
             foreach ($products as $productData) {
                 ProductInvoice::create([
@@ -258,47 +177,23 @@ class InvoiceController extends Controller {
                     'days' => $productData['days'],
                     'amount' => $productData['amount'],
                 ]);
-
-                $product = Product::find($productData['product_id']);
-                if ($product) {
-                    $product->decrement('quantity', $productData['quantity']);
-                }
             }
         }
 
-        // Save updated service invoices
-        if (!empty($services)) {
-            foreach ($services as $serviceData) {
-                ServiceInvoice::create([
-                    'invoice_id' => $invoice->id,
-                    'service_id' => $serviceData['service_id'],
-                    'quantity' => $serviceData['quantity'],
-                    'days' => $serviceData['days'],
-                    'amount' => $serviceData['amount'],
-                ]);
-            }
-        }
     
         return redirect()->route('invoices.index')->with('success', 'Invoice updated successfully.');
     }
 
     public function show($id)
     {
-        $invoice = Invoice::with(['client', 'productInvoices.product', 'serviceInvoices.service'])->findOrFail($id);
+        $invoice = Invoice::with(['client', 'productInvoices.product'])->findOrFail($id);
         return view('invoices.show', compact('invoice'));
     }
 
 
     public function destroy($id) {
-        $invoice = Invoice::findOrFail($id);
-
-        // Restore stock
-        foreach ($invoice->productInvoices as $productInvoice) {
-            $product = Product::find($productInvoice->product_id);
-            if ($product) {
-                $product->increment('quantity', $productInvoice->quantity);
-            }
-        }
+        
+        $invoice = Invoice::with('productInvoices')->findOrFail($id);
 
         $invoice->delete();
         return redirect()->route('invoices.index')->with('success', 'Invoice deleted successfully.');
@@ -308,10 +203,13 @@ class InvoiceController extends Controller {
     public function search(Request $request) {
         $query = $request->input('search');
     
-        $invoices = Invoice::whereHas('client', function ($q) use ($query) {
-            $q->where('first_name', 'like', "%$query%")
-              ->orWhere('last_name', 'like', "%$query%");
-        })->get();
+        $invoices = Invoice::with('client')
+            ->whereHas('client', function ($q) use ($query) {
+                $q->where('first_name', 'like', "%$query%")
+                  ->orWhere('last_name', 'like', "%$query%");
+            })
+            ->latest()
+            ->paginate(15);
     
         return view('invoices.index', compact('invoices'));
     }
@@ -333,8 +231,8 @@ class InvoiceController extends Controller {
             $query->where('status', $request->status);
         }
     
-        //Fetch the filtered invoices
-        $invoices = $query->with('client')->get();
+        //Fetch the filtered invoices with pagination
+        $invoices = $query->with('client')->latest()->paginate(15);
     
         //Return the view with filtered invoices
         return view('invoices.index', compact('invoices'));
@@ -343,7 +241,7 @@ class InvoiceController extends Controller {
     public function print($id)
     {
         //Fetch the invoice
-        $invoice = Invoice::with(['client', 'productInvoices.product', 'serviceInvoices.service'])->findOrFail($id);
+        $invoice = Invoice::with(['client', 'productInvoices.product'])->findOrFail($id);
         $settings = Setting::first();
 
         //Return a printable view
@@ -353,7 +251,7 @@ class InvoiceController extends Controller {
     public function download($id)
     {
         //Fetch the invoice
-        $invoice = Invoice::with(['client', 'productInvoices.product', 'serviceInvoices.service'])->findOrFail($id);
+        $invoice = Invoice::with(['client', 'productInvoices.product'])->findOrFail($id);
         $settings = Setting::first();
 
         //Generate PDF

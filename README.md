@@ -1,66 +1,385 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📄 Invoice Management System — Documentation
+### CellHub Manager | Laravel 12 Web Application
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+---
 
-## About Laravel
+## 🔑 Admin Login Credentials
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+> **Note:** Project start karala seeding karanakota me credentials use karanna.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+| Field | Value |
+|-------|-------|
+| **URL** | http://localhost:8000 |
+| **Email** | `admin@gmail.com` |
+| **Password** | `admin123` |
+| **Role** | Admin (All Permissions) |
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🏗️ Tech Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+| Layer | Technology |
+|-------|-----------|
+| **Backend** | Laravel 12.1.1 (PHP) |
+| **Frontend** | Blade Templates + TailwindCSS |
+| **Database** | SQLite (local) |
+| **Authentication** | Laravel Breeze |
+| **Permissions** | Spatie Laravel Permission |
+| **PDF Generation** | barryvdh/laravel-dompdf |
+| **Build Tool** | Vite 6 |
+| **Icons** | Blade Icons (FontAwesome + Google Material) |
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🚀 Quick Start Guide (Fresh Clone)
 
-## Laravel Sponsors
+### Step 1 — Dependencies Install
+```bash
+composer install
+npm install
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Step 2 — Environment Setup
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-### Premium Partners
+### Step 3 — Database Setup
+```bash
+php artisan migrate
+php artisan db:seed
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Step 4 — Start Servers
+```bash
+# Terminal 1 — PHP Server
+php artisan serve
 
-## Contributing
+# Terminal 2 — Vite Dev Server (CSS/JS)
+npm run dev
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Step 5 — Open Browser
+```
+http://localhost:8000
+```
+Login with: `admin@gmail.com` / `admin123`
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 📁 Project File Structure
 
-## Security Vulnerabilities
+```
+Invoice Management System (WEB)/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── DashboardController.php    ← Dashboard + Income chart
+│   │   │   ├── InvoiceController.php      ← Invoice CRUD + PDF
+│   │   │   ├── ClientController.php       ← Client management
+│   │   │   ├── ProductController.php      ← Product management
+│   │   │   ├── CategoryController.php     ← Category management
+│   │   │   ├── UserController.php         ← User management
+│   │   │   ├── RoleController.php         ← Role management
+│   │   │   └── SettingsController.php     ← App settings
+│   │   └── Requests/                      ← Form validation
+│   └── Models/
+│       ├── Invoice.php
+│       ├── Client.php
+│       ├── Product.php
+│       ├── Category.php
+│       ├── ProductInvoice.php
+│       ├── Setting.php
+│       └── User.php
+├── database/
+│   ├── migrations/                        ← Database tables
+│   └── seeders/
+│       ├── DatabaseSeeder.php             ← Main seeder
+│       ├── AdminUserSeeder.php            ← Admin credentials
+│       ├── PermissionSeeder.php           ← All permissions
+│       ├── SettingSeeder.php              ← Default company settings
+│       └── ExampleDataSeeder.php          ← Sample data
+├── resources/
+│   ├── views/
+│   │   ├── layouts/
+│   │   │   ├── app.blade.php              ← Main layout (sidebar + nav)
+│   │   │   └── navigation.blade.php      ← Top navigation bar
+│   │   ├── dashboard/                     ← Dashboard views
+│   │   ├── invoices/                      ← Invoice views
+│   │   ├── clients/                       ← Client views
+│   │   ├── products/                      ← Product views
+│   │   ├── categories/                    ← Category views
+│   │   ├── stock/                         ← Stock views
+│   │   ├── users/                         ← User views
+│   │   └── roles/                         ← Role views
+│   └── css/app.css                        ← TailwindCSS entry
+└── routes/
+    ├── web.php                            ← All web routes
+    └── auth.php                           ← Auth routes
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## 🗄️ Database Tables
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+| Table | Description |
+|-------|-------------|
+| `users` | System users (admin, staff) |
+| `roles` | User roles (Admin, Staff, etc.) |
+| `permissions` | Individual permissions |
+| `clients` | Customer/client records |
+| `categories` | Product/service categories |
+| `products` | Products with stock tracking |
+| `invoices` | Invoice records |
+| `product_invoices` | Invoice-product pivot table |
+| `settings` | App configuration (company info) |
+| `sessions` | User sessions (file-based) |
+| `cache` | Application cache |
+| `jobs` | Background jobs queue |
+
+---
+
+## ✅ Features
+
+### 📊 Dashboard
+- Total clients, invoices, products, income overview
+- Invoice status pie chart (Paid / Unpaid / Partially Paid / Overdue / Processing)
+- Income trend line chart with date range filter
+
+### 🧾 Invoices
+- Create / Edit / Delete invoices
+- Add multiple products 
+- Discount support (percentage or fixed amount)
+- Invoice status: `unpaid`, `paid`, `partially_paid`, `overdue`, `processing`
+- Print invoice (browser print)
+- Download invoice as **PDF**
+- Filter by status, date range, client
+- Search by client name
+- Pagination (15 per page)
+
+### 👥 Clients
+- Create / Edit / Delete clients
+- Fields: title, first name, last name, country, passport no, address, company, mobile, email
+- Invoice count per client
+- Search by first name / last name
+- Pagination (15 per page)
+
+### 📦 Products
+- Create / Edit / Delete products
+- Category assignment
+- Unit price + quantity (stock) tracking
+- Product image upload
+- Unique name per category enforced
+- Pagination (15 per page)
+
+### 📁 Categories
+- Create / Edit / Delete categories
+- Search by name
+
+### ⚙️ Settings
+- Company name, phone, address, country, city, zip
+- App name + logo upload
+- Used on invoice print/download PDFs
+
+### 👤 Users & Roles
+- Create users and assign roles
+- Create custom roles with specific permissions
+- Full permission-based access control
+
+---
+
+## 🔐 Permissions System
+
+All permissions managed by **Spatie Laravel Permission**.
+
+| Module | Permissions |
+|--------|------------|
+| **Users** | `user-list`, `user-create`, `user-edit`, `user-delete` |
+| **Roles** | `role-list`, `role-create`, `role-edit`, `role-delete` |
+| **Categories** | `category-list`, `category-create`, `category-edit`, `category-delete` |
+| **Products** | `product-list`, `product-create`, `product-edit`, `product-delete` |
+| **Clients** | `client-list`, `client-create`, `client-edit`, `client-delete` |
+| **Invoices** | `invoice-list`, `invoice-create`, `invoice-edit`, `invoice-delete`, `invoice-download`, `invoice-print` |
+| **Settings** | `settings` |
+
+> **Admin** role has ALL permissions automatically assigned.
+
+---
+
+## 🌐 Route Reference
+
+| Method | URL | Controller | Permission |
+|--------|-----|------------|------------|
+| GET | `/dashboard` | DashboardController@index | auth |
+| GET | `/invoices` | InvoiceController@index | invoice-list |
+| GET | `/invoices/create` | InvoiceController@create | invoice-create |
+| POST | `/invoices` | InvoiceController@store | invoice-create |
+| GET | `/invoices/{id}` | InvoiceController@show | invoice-list |
+| GET | `/invoices/{id}/edit` | InvoiceController@edit | invoice-edit |
+| PUT | `/invoices/{id}` | InvoiceController@update | invoice-edit |
+| DELETE | `/invoices/{id}` | InvoiceController@destroy | invoice-delete |
+| GET | `/invoices/{id}/print` | InvoiceController@print | invoice-print |
+| GET | `/invoices/{id}/download` | InvoiceController@download | invoice-download |
+| GET | `/clients` | ClientController@index | client-list |
+| GET | `/products` | ProductController@index | product-list |
+| GET | `/categories` | CategoryController@index | category-list |
+| GET | `/stock-handle` | StockController@index | product-edit |
+| GET | `/settings` | SettingsController@index | settings |
+| GET | `/users` | UserController@index | user-list |
+| GET | `/roles` | RoleController@index | role-list |
+
+---
+
+## 🛠️ Common Artisan Commands
+
+```bash
+# Start development servers
+php artisan serve                    # PHP server (port 8000)
+npm run dev                         # Vite dev server
+
+# Database
+php artisan migrate                  # Run new migrations
+php artisan migrate:fresh --seed     # Fresh DB + seed all data
+php artisan db:seed                  # Seed without fresh
+php artisan db:seed --class=AdminUserSeeder  # Seed only admin user
+
+# Cache (run after any code change in production)
+php artisan optimize                 # Cache config + routes + views
+php artisan optimize:clear           # Clear all cache (use in development)
+php artisan view:clear               # Clear only blade cache
+php artisan config:clear             # Clear only config cache
+
+# Other
+php artisan route:list               # See all routes
+php artisan tinker                   # Interactive PHP shell
+php artisan make:controller NameController  # Create new controller
+php artisan make:model Name -m       # Create model + migration
+php artisan make:migration name      # Create migration
+```
+
+---
+
+## 🔧 Environment Configuration (.env)
+
+```env
+APP_NAME=Laravel
+APP_ENV=local               # Change to 'production' for live server
+APP_KEY=base64:...          # Auto-generated by key:generate
+APP_DEBUG=true              # Set false in production
+APP_URL=http://localhost
+
+DB_CONNECTION=sqlite        # Uses database/database.sqlite
+
+SESSION_DRIVER=file         # file is faster for local dev
+CACHE_STORE=file            # file is faster for local dev
+```
+
+### Switch to MySQL (if needed)
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=invoice_db
+DB_USERNAME=root
+DB_PASSWORD=
+```
+Then run: `php artisan migrate:fresh --seed`
+
+---
+
+## ⚡ Performance Notes
+
+The following optimizations have been applied:
+
+| Optimization | Details |
+|-------------|---------|
+| **Laravel Cache** | `php artisan optimize` — config, routes, views cached |
+| **DB Indexes** | `invoices.status`, `invoices.invoice_date`, `clients.first_name`, `products.name`, `services.name` |
+| **Pagination** | All list pages paginate 15 records (invoices, products, services, clients) |
+| **Eager Loading** | `with('client')`, `with('category')`, `with('productInvoices')` — prevents N+1 |
+| **Dashboard Query** | Single `groupBy('status')` query instead of 9 separate queries |
+| **Stock Bulk Update** | Single `whereIn` pre-load instead of per-product queries |
+| **Session/Cache Driver** | `file` instead of `database` — reduces DB load |
+
+> **Tip:** Development walata always `php artisan optimize:clear` use karanna. Production walata `php artisan optimize` use karanna.
+
+---
+
+## 🐛 Troubleshooting
+
+### Page blank / 500 error
+```bash
+php artisan optimize:clear
+php artisan config:clear
+# Check storage permissions
+```
+
+### Vendor folder missing (fresh clone)
+```bash
+composer install
+```
+
+### APP_KEY error
+```bash
+php artisan key:generate
+```
+
+### Database error / table not found
+```bash
+php artisan migrate
+# or fresh start:
+php artisan migrate:fresh --seed
+```
+
+### Vite assets not loading (CSS/JS missing)
+```bash
+npm install
+npm run dev
+# Make sure Vite server is running alongside PHP server
+```
+
+### Pagination links not showing
+Pagination shows only when records > 15. With sample data it may not show.
+
+### Permission denied error on login
+Run seeder to assign permissions:
+```bash
+php artisan db:seed --class=PermissionSeeder
+php artisan db:seed --class=AdminUserSeeder
+```
+
+---
+
+## 📊 Default Company Settings (from SettingSeeder)
+
+| Field | Default Value |
+|-------|--------------|
+| **App Name** | CellHub Manager |
+| **Company Name** | CellHub Premium Store |
+| **Phone** | +94 77 123 4567 |
+| **Country** | Sri Lanka |
+| **State** | Western Province |
+| **City** | Colombo 03 |
+| **Zip Code** | 00300 |
+| **Fax** | +94 11 234 5678 |
+| **Address** | No. 45, Galle Road, Colombo 03, Sri Lanka |
+
+> Settings page (`/settings`) walata gihilla change karanna puluwan.
+
+---
+
+## 📦 Key Composer Packages
+
+| Package | Purpose |
+|---------|---------|
+| `laravel/framework` v12 | Core framework |
+| `laravel/breeze` | Auth (login/register/profile) |
+| `spatie/laravel-permission` | Role & permission management |
+| `barryvdh/laravel-dompdf` | PDF generation |
+| `blade-ui-kit/blade-icons` | SVG icon components |
+| `laravel/tinker` | Interactive REPL |
+
+---
+
+*Documentation generated: 2026-06-30 | Project: Invoice Management System (CellHub Manager)*

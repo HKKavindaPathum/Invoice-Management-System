@@ -59,71 +59,6 @@
             </div>
         </div>
 
-        <!-- Services Section -->
-        <div class="space-y-4 pt-4 border-t border-slate-100">
-            <h3 class="text-md font-bold text-slate-700 uppercase tracking-wider">Services</h3>
-            <div id="services-container" class="space-y-3">
-                <!-- Service row template / first row -->
-                <div class="service-item border border-slate-150 p-4 rounded-2xl bg-slate-50/50">
-                    <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
-                        <div class="md:col-span-4 space-y-1">
-                            <label class="block text-xs font-semibold text-slate-500">Service Description</label>
-                            <select name="services[0][service_id]" 
-                                    class="service-select w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none bg-white transition">
-                                <option value="">Select Service</option>
-                                @foreach($services as $service)
-                                    <option value="{{ $service->id }}" data-price="{{ $service->unit_price }}">{{ $service->name }} (RS: {{ number_format($service->unit_price, 2) }})</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        
-                        <div class="md:col-span-2 space-y-1">
-                            <label class="block text-xs font-semibold text-slate-500">Rate</label>
-                            <input type="number" name="services[0][unit_price]" 
-                                   class="unit-price w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl bg-slate-100 outline-none" 
-                                   readonly>
-                        </div>
-                        
-                        <div class="md:col-span-1.5 space-y-1">
-                            <label class="block text-xs font-semibold text-slate-500">Qty/Units</label>
-                            <input type="number" name="services[0][quantity]" 
-                                   class="quantity w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition bg-white" 
-                                   value="1" min="1">
-                        </div>
-                        
-                        <div class="md:col-span-1.5 space-y-1">
-                            <label class="block text-xs font-semibold text-slate-500">Days/Nights</label>
-                            <input type="number" name="services[0][days]" 
-                                   class="days w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition bg-white" 
-                                   value="1" min="1">
-                        </div>
-                        
-                        <div class="md:col-span-2 space-y-1">
-                            <label class="block text-xs font-semibold text-slate-500">Amount</label>
-                            <input type="number" name="services[0][amount]" 
-                                   class="amount w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl bg-slate-100 outline-none" 
-                                   readonly>
-                        </div>
-                        
-                        <div class="md:col-span-1 flex items-end">
-                            <button type="button" 
-                                    class="remove-service w-full py-1.5 px-2 border border-transparent text-xs font-semibold rounded-xl text-white bg-red-500 hover:bg-red-600 shadow-md shadow-red-500/10 transition">
-                                Remove
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <button type="button" id="add-service" 
-                    class="inline-flex items-center px-4 py-2 border border-transparent text-xs font-bold rounded-xl shadow-md text-white bg-blue-600 hover:bg-blue-700 shadow-blue-500/10 transition outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
-                Add Service
-            </button>
-        </div>
-
         <!-- Products Section -->
         <div class="space-y-4 pt-6 border-t border-slate-100">
             <h3 class="text-md font-bold text-slate-700 uppercase tracking-wider">Products</h3>
@@ -256,75 +191,6 @@
         let dueDateFormatted = dueDate.toISOString().split('T')[0];
         $("input[name='due_date']").val(dueDateFormatted);
 
-        // Fetch unit price on service selection
-        $(document).on("change", ".service-select", function() {
-            let row = $(this).closest(".service-item");
-            let serviceId = $(this).val();
-            let unitPriceField = row.find(".unit-price");
-
-            if (serviceId) {
-                $.ajax({
-                    url: "/service-price/" + serviceId,
-                    type: "GET",
-                    success: function(response) {
-                        unitPriceField.val(response.unit_price);
-                        updateRowAmount(row);
-                    },
-                    error: function() {
-                        unitPriceField.val("0");
-                        updateRowAmount(row);
-                    }
-                });
-            } else {
-                unitPriceField.val("0");
-                updateRowAmount(row);
-            }
-        });
-
-        // Fetch unit price on product selection
-        $(document).on("change", ".product-select", function() {
-            let row = $(this).closest(".product-item");
-            let productId = $(this).val();
-            let unitPriceField = row.find(".unit-price");
-
-            if (productId) {
-                $.ajax({
-                    url: "/product-price/" + productId,
-                    type: "GET",
-                    success: function(response) {
-                        unitPriceField.val(response.unit_price);
-                        updateRowAmount(row);
-                    },
-                    error: function() {
-                        unitPriceField.val("0");
-                        updateRowAmount(row);
-                    }
-                });
-            } else {
-                unitPriceField.val("0");
-                updateRowAmount(row);
-            }
-        });
-
-        // Add new service row
-        $("#add-service").click(function() {
-            let newService = $(".service-item:first").clone();
-            let index = $(".service-item").length;
-
-            newService.find("input").val("");
-            newService.find("select").val("");
-            newService.find(".unit-price, .amount").val("0");
-            newService.find(".quantity, .days").val("1");
-
-            newService.find('[name^="services[0]"]').each(function() {
-                let name = $(this).attr("name");
-                name = name.replace("services[0]", `services[${index}]`);
-                $(this).attr("name", name);
-            });
-
-            newService.hide().appendTo("#services-container").fadeIn(200);
-        });
-
         // Add new product row
         $("#add-product").click(function() {
             let newProduct = $(".product-item:first").clone();
@@ -342,24 +208,6 @@
             });
 
             newProduct.hide().appendTo("#products-container").fadeIn(200);
-        });
-
-        // Remove service row
-        $(document).on("click", ".remove-service", function() {
-            let row = $(this).closest(".service-item");
-            if ($(".service-item").length > 1) {
-                row.fadeOut(200, function() {
-                    $(this).remove();
-                    updateTotalAmount();
-                });
-            } else {
-                // Just clear the row
-                row.find("input").val("");
-                row.find("select").val("");
-                row.find(".unit-price, .amount").val("0");
-                row.find(".quantity, .days").val("1");
-                updateTotalAmount();
-            }
         });
 
         // Remove product row
@@ -386,7 +234,7 @@
             if (isNaN(val) || val < 1) {
                 $(this).val("1");
             }
-            updateRowAmount($(this).closest(".product-item, .service-item"));
+            updateRowAmount($(this).closest(".product-item"));
         });
 
         function updateRowAmount(row) {

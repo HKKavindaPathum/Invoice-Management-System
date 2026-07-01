@@ -65,7 +65,7 @@
                                 #{{ $invoice->id }}
                             </a>
                         </td>
-                        <td class="py-4 px-4 text-slate-700 font-medium">
+                        <td class="py-4 px-4 text-slate-700 dark:text-slate-200 font-medium">
                             {{ $invoice->client->title }} {{ $invoice->client->first_name }} {{ $invoice->client->last_name }}
                         </td>
                         <td class="py-4 px-4 text-slate-500">{{ $invoice->invoice_date }}</td>
@@ -134,7 +134,7 @@
                         <a href="{{ route('invoices.show', $invoice->id) }}" class="font-bold text-blue-600 hover:text-blue-800 transition">
                             Invoice #{{ $invoice->id }}
                         </a>
-                        <div class="text-slate-700 font-medium text-sm mt-1">
+                        <div class="text-slate-700 dark:text-slate-200 font-medium text-sm mt-1">
                             {{ $invoice->client->title }} {{ $invoice->client->first_name }} {{ $invoice->client->last_name }}
                         </div>
                         <div class="text-slate-400 text-xs mt-1">Date: {{ $invoice->invoice_date }}</div>

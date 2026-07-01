@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\Product;
 use App\Models\ProductInvoice;
 use App\Models\Setting;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -31,8 +32,9 @@ class InvoiceController extends Controller {
 
     public function create() {
         $clients = Client::all();
-        $products = Product::all();
-        return view('invoices.create', compact('clients', 'products'));
+        $products = Product::with('category')->get();
+        $categories = Category::all();
+        return view('invoices.create', compact('clients', 'products', 'categories'));
     }
 
     public function getProductPrice($product_id) {
@@ -111,9 +113,10 @@ class InvoiceController extends Controller {
         //Fetch the invoice with its associated client, products and services
         $invoice->load(['client', 'productInvoices.product']);
         $clients = Client::all();
-        $products = Product::all();
+        $products = Product::with('category')->get();
+        $categories = Category::all();
     
-        return view('invoices.edit', compact('invoice', 'clients', 'products'));
+        return view('invoices.edit', compact('invoice', 'clients', 'products', 'categories'));
     }
     
     public function update(Request $request, Invoice $invoice) {

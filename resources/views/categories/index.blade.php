@@ -49,6 +49,14 @@
         </div>
         @endif
 
+        <!-- Error Toast -->
+        @if(session('error'))
+        <div id="errorToast" class="fixed top-20 right-6 bg-red-900 text-white px-5 py-3 rounded-xl shadow-2xl z-50 opacity-0 transform translate-y-4 transition-all duration-500 flex items-center gap-2 text-sm border border-red-800">
+            <span class="text-white font-bold">⚠</span>
+            {{ session('error') }}
+        </div>
+        @endif
+
         @can('category-list')
         <!-- Desktop Table -->
         <div class="hidden md:block overflow-hidden border border-slate-100 rounded-xl">
@@ -182,6 +190,16 @@
             setTimeout(() => {
                 toast.classList.add('opacity-0', 'translate-y-4');
                 toast.classList.remove('opacity-100', 'translate-y-0');
+            }, 5000);
+        }
+
+        const errorToast = document.getElementById('errorToast');
+        if (errorToast) {
+            errorToast.classList.remove('opacity-0', 'translate-y-4');
+            errorToast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                errorToast.classList.add('opacity-0', 'translate-y-4');
+                errorToast.classList.remove('opacity-100', 'translate-y-0');
             }, 5000);
         }
     });

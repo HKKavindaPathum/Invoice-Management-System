@@ -97,6 +97,12 @@
             <!-- Action Buttons -->
             <div class="mt-8 flex justify-end space-x-3 border-t border-slate-100 pt-6">
                 <a href="{{ route('invoices.index') }}" class="bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 px-6 rounded-xl font-bold transition">Back</a>
+                <a href="{{ route('invoices.print', $invoice->id) }}" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 px-6 rounded-xl font-bold transition flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    </svg>
+                    Print Invoice
+                </a>
                 <a href="{{ route('invoices.edit', $invoice->id) }}" class="bg-blue-600 hover:bg-blue-700 text-white py-2.5 px-6 rounded-xl font-bold transition">Edit</a>
             </div>
 

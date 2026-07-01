@@ -71,6 +71,12 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::findOrFail($id);
+        
+        // Prevent deletion if category contains products
+        if ($category->products()->exists()) {
+            return redirect()->route('categories.index')->with('error', 'Cannot delete category because it contains active products.');
+        }
+
         $category->delete();
 
         return redirect()->route('categories.index')->with('success', 'Category deleted successfully!');

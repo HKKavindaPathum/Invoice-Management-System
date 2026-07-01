@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex items-center justify-center bg-gradient-to-r from-blue-50 to-purple-50 p-6">
+    <div class="flex items-center justify-center bg-gradient-to-r from-blue-50 to-purple-50 dark:from-slate-900 dark:to-slate-950 p-6">
         <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-4xl w-full">
 
             <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">
@@ -11,21 +11,21 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Left Column -->
                 <div class="space-y-4">
-                    <div class="bg-gray-100 p-4 rounded-lg">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl">
                         <span class="text-sm font-semibold text-gray-600">Client Name:</span>
                         <p class="text-lg font-medium text-gray-800">{{ $client->title }}{{ $client->first_name }} {{ $client->last_name }}</p>
                     </div>
-                    <div class="bg-gray-100 p-4 rounded-lg">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl">
                         <span class="text-sm font-semibold text-gray-600">Country:</span>
                         <p class="text-lg font-medium text-gray-800">{{ $client->country }}</p>
                     </div>
-                    <div class="bg-gray-100 p-4 rounded-lg">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl">
                         <span class="text-sm font-semibold text-gray-600">Passport No:</span>
                         <p class="text-lg font-medium text-gray-800 break-words">
                             {{ $client->passport_no ?? 'No Passport No available' }}
                         </p>
                     </div>
-                    <div class="bg-gray-100 p-4 rounded-lg">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl">
                         <span class="text-sm font-semibold text-gray-600">Address:</span>
                         <p class="text-lg font-medium text-gray-800 break-words">
                             {{ $client->address ?? 'No Address available' }}
@@ -37,25 +37,25 @@
                 <!-- Right Column -->
                 <div class="space-y-4">
 
-                    <div class="bg-gray-100 p-4 rounded-lg">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl">
                         <span class="text-sm font-semibold text-gray-600">Company Name:</span>
                         <p class="text-lg font-medium text-gray-800 break-words">
                             {{ $client->company_name ?? 'No Company Name available' }}
                         </p>
                     </div>
-                    <div class="bg-gray-100 p-4 rounded-lg">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl">
                         <span class="text-sm font-semibold text-gray-600">Mobile No:</span>
                         <p class="text-lg font-medium text-gray-800 break-words">
                             {{ $client->mobile_no ?? 'No Mobile No available' }}
                         </p>
                     </div>
-                    <div class="bg-gray-100 p-4 rounded-lg">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl">
                         <span class="text-sm font-semibold text-gray-600">Email:</span>
                         <p class="text-lg font-medium text-gray-800 break-words">
                             {{ $client->email ?? 'No Email available' }}
                         </p>
                     </div>
-                    <div class="bg-gray-100 p-4 rounded-lg">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl">
                         <span class="text-sm font-semibold text-gray-600">Note:</span>
                         <p class="text-lg font-medium text-gray-800 break-words">
                             {{ $client->note ?? 'No note available' }}

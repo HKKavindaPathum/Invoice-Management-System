@@ -15,7 +15,7 @@
     </div>
 @endif
 
-<div class="container mx-auto bg-white shadow-lg rounded-lg p-4 md:p-6 mt-4 md:mt-6 max-w-6xl">
+<div class="container mx-auto bg-white shadow-lg rounded-lg p-4 md:p-6 mt-4 md:mt-6 max-w-7xl">
     <h2 class="text-lg md:text-xl font-bold mb-4 md:mb-6 text-slate-800 uppercase tracking-wider border-b border-slate-100 pb-3">Edit Invoice #{{ $invoice->id }}</h2>
 
     <form action="{{ route('invoices.update', $invoice) }}" method="POST" class="space-y-6">
@@ -23,21 +23,21 @@
         @method('PUT')
 
         <!-- Header Section -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-            <div class="space-y-2">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
+            <div class="space-y-2 md:col-span-1">
                 <label class="block text-sm font-semibold text-slate-600">Invoice Date</label>
                 <input type="date" name="invoice_date" value="{{ $invoice->invoice_date }}"
                        class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition">
             </div>
-            <div class="space-y-2">
+            <div class="space-y-2 md:col-span-1">
                 <label class="block text-sm font-semibold text-slate-600">Due Date</label>
                 <input type="date" name="due_date" value="{{ $invoice->due_date }}"
                        class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition">
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            <div class="space-y-2">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+            <div class="space-y-2 md:col-span-2">
                 <label class="block text-sm font-semibold text-slate-600">Customer (Client)</label>
                 <div class="flex items-center gap-2">
                     <select id="client_select" name="client_id" required
@@ -56,7 +56,7 @@
                 </div>
             </div>
 
-            <div class="space-y-2">
+            <div class="space-y-2 md:col-span-1">
                 <label class="block text-sm font-semibold text-slate-600">Status</label>
                 <select name="status"
                         class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition">
@@ -78,21 +78,33 @@
                 @if($invoice->productInvoices->count() > 0)
                     @foreach($invoice->productInvoices as $index => $productInvoice)
                     <div class="product-item border border-slate-150 p-4 rounded-2xl bg-slate-50/50">
-                        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
-                            <div class="md:col-span-4 space-y-1">
+                        <div class="flex flex-col md:flex-row gap-3 items-end w-full">
+                            <div class="w-full md:w-52 space-y-1 flex-shrink-0">
+                                <label class="block text-xs font-semibold text-slate-500">Category</label>
+                                <select class="category-select w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none bg-white transition">
+                                    <option value="">All Categories</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ $productInvoice->product->category_id == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="w-full md:flex-1 min-w-[200px] space-y-1">
                                 <label class="block text-xs font-semibold text-slate-500">Product Item</label>
                                 <select name="products[{{ $index }}][product_id]" 
                                         class="product-select w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none bg-white transition">
                                     <option value="">Select Product</option>
                                     @foreach($products as $product)
-                                        <option value="{{ $product->id }}" data-price="{{ $product->unit_price }}" {{ $productInvoice->product_id == $product->id ? 'selected' : '' }}>
+                                        <option value="{{ $product->id }}" data-price="{{ $product->unit_price }}" data-category="{{ $product->category_id }}" {{ $productInvoice->product_id == $product->id ? 'selected' : '' }}>
                                             {{ $product->name }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
-                            
-                            <div class="md:col-span-2 space-y-1">
+
+                            <div class="w-full md:w-32 space-y-1 flex-shrink-0">
                                 <label class="block text-xs font-semibold text-slate-500">Unit Price</label>
                                 <input type="number" name="products[{{ $index }}][unit_price]" 
                                        value="{{ $productInvoice->product->unit_price }}"
@@ -100,7 +112,7 @@
                                        readonly>
                             </div>
                             
-                            <div class="md:col-span-1.5 space-y-1">
+                            <div class="w-full md:w-16 space-y-1 flex-shrink-0">
                                 <label class="block text-xs font-semibold text-slate-500">Quantity</label>
                                 <input type="number" name="products[{{ $index }}][quantity]" 
                                        value="{{ $productInvoice->quantity }}"
@@ -108,7 +120,7 @@
                                        min="1">
                             </div>
                             
-                            <div class="md:col-span-1.5 space-y-1">
+                            <div class="w-full md:w-16 space-y-1 flex-shrink-0">
                                 <label class="block text-xs font-semibold text-slate-500">Days</label>
                                 <input type="number" name="products[{{ $index }}][days]" 
                                        value="{{ $productInvoice->days }}"
@@ -116,7 +128,7 @@
                                        min="1">
                             </div>
                             
-                            <div class="md:col-span-2 space-y-1">
+                            <div class="w-full md:w-32 space-y-1 flex-shrink-0">
                                 <label class="block text-xs font-semibold text-slate-500">Amount</label>
                                 <input type="number" name="products[{{ $index }}][amount]" 
                                        value="{{ $productInvoice->amount }}"
@@ -124,7 +136,7 @@
                                        readonly>
                             </div>
                             
-                            <div class="md:col-span-1 flex items-end">
+                            <div class="w-full md:w-20 flex-shrink-0">
                                 <button type="button" 
                                         class="remove-product w-full py-1.5 px-2 border border-transparent text-xs font-semibold rounded-xl text-white bg-red-500 hover:bg-red-600 shadow-md shadow-red-500/10 transition">
                                     Remove
@@ -136,49 +148,59 @@
                 @else
                     <!-- Fallback row for cloning -->
                     <div class="product-item border border-slate-150 p-4 rounded-2xl bg-slate-50/50">
-                        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
-                            <div class="md:col-span-4 space-y-1">
+                        <div class="flex flex-col md:flex-row gap-3 items-end w-full">
+                            <div class="w-full md:w-52 space-y-1 flex-shrink-0">
+                                <label class="block text-xs font-semibold text-slate-500">Category</label>
+                                <select class="category-select w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none bg-white transition">
+                                    <option value="">All Categories</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="w-full md:flex-1 min-w-[200px] space-y-1">
                                 <label class="block text-xs font-semibold text-slate-500">Product Item</label>
                                 <select name="products[0][product_id]" 
                                         class="product-select w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none bg-white transition">
                                     <option value="">Select Product</option>
                                     @foreach($products as $product)
-                                        <option value="{{ $product->id }}" data-price="{{ $product->unit_price }}">
+                                        <option value="{{ $product->id }}" data-price="{{ $product->unit_price }}" data-category="{{ $product->category_id }}">
                                             {{ $product->name }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
-                            
-                            <div class="md:col-span-2 space-y-1">
+
+                            <div class="w-full md:w-32 space-y-1 flex-shrink-0">
                                 <label class="block text-xs font-semibold text-slate-500">Unit Price</label>
                                 <input type="number" name="products[0][unit_price]" 
                                        class="unit-price w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl bg-slate-100 outline-none" 
                                        readonly>
                             </div>
                             
-                            <div class="md:col-span-1.5 space-y-1">
+                            <div class="w-full md:w-16 space-y-1 flex-shrink-0">
                                 <label class="block text-xs font-semibold text-slate-500">Quantity</label>
                                 <input type="number" name="products[0][quantity]" 
                                        class="quantity w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition bg-white" 
                                        value="1" min="1">
                             </div>
                             
-                            <div class="md:col-span-1.5 space-y-1">
+                            <div class="w-full md:w-16 space-y-1 flex-shrink-0">
                                 <label class="block text-xs font-semibold text-slate-500">Days</label>
                                 <input type="number" name="products[0][days]" 
                                        class="days w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition bg-white" 
                                        value="1" min="1">
                             </div>
                             
-                            <div class="md:col-span-2 space-y-1">
+                            <div class="w-full md:w-32 space-y-1 flex-shrink-0">
                                 <label class="block text-xs font-semibold text-slate-500">Amount</label>
                                 <input type="number" name="products[0][amount]" 
                                        class="amount w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl bg-slate-100 outline-none" 
                                        readonly>
                             </div>
                             
-                            <div class="md:col-span-1 flex items-end">
+                            <div class="w-full md:w-20 flex-shrink-0">
                                 <button type="button" 
                                         class="remove-product w-full py-1.5 px-2 border border-transparent text-xs font-semibold rounded-xl text-white bg-red-500 hover:bg-red-600 shadow-md shadow-red-500/10 transition">
                                     Remove
@@ -199,42 +221,54 @@
         </div>
 
         <!-- Totals Section -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 pt-6 border-t border-slate-100">
-            <div class="space-y-1">
-                <label class="block text-sm font-semibold text-slate-600">Subtotal</label>
-                <input type="number" name="total_amount" value="{{ $invoice->total_amount }}"
-                       class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl bg-slate-50 font-medium outline-none" 
-                       readonly>
-            </div>
-            
-            <div class="space-y-1">
-                <label class="block text-sm font-semibold text-slate-600">Discount Type</label>
-                <select id="discount-type" name="discount_type" 
-                        class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition bg-white">
-                    <option value="percentage" {{ $invoice->discount_type == 'percentage' ? 'selected' : '' }}>Percentage (%)</option>
-                    <option value="fixed" {{ $invoice->discount_type == 'fixed' ? 'selected' : '' }}>Fixed Amount (RS)</option>
-                </select>
-            </div>
-            
-            <div class="space-y-1">
-                <label class="block text-sm font-semibold text-slate-600">Discount Value</label>
-                <input type="number" id="discount-value" name="discount" value="{{ $invoice->discount }}" placeholder="0" 
-                       class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition bg-white">
-            </div>
-        </div>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 pt-6 border-t border-slate-100">
+            <!-- Left 1/2: Subtotal, Discount Type, Discount Value, Final Amount -->
+            <div class="md:col-span-6 space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Subtotal -->
+                    <div class="space-y-1 sm:col-span-1">
+                        <label class="block text-sm font-semibold text-slate-600">Subtotal</label>
+                        <input type="number" name="total_amount" value="{{ $invoice->total_amount }}"
+                               class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl bg-slate-50 font-medium outline-none" 
+                               readonly>
+                    </div>
+                    <!-- Spacer to push next elements to new row -->
+                    <div class="hidden sm:block"></div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            <div class="space-y-1">
-                <label class="block text-sm font-semibold text-slate-600">Final Amount</label>
-                <input type="number" name="final_amount" value="{{ $invoice->final_amount }}"
-                       class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl bg-slate-50 font-bold text-blue-600 text-lg outline-none" 
-                       readonly>
+                    <!-- Discount Type -->
+                    <div class="space-y-1">
+                        <label class="block text-sm font-semibold text-slate-600">Discount Type</label>
+                        <select id="discount-type" name="discount_type" 
+                                class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition bg-white">
+                            <option value="percentage" {{ $invoice->discount_type == 'percentage' ? 'selected' : '' }}>Percentage (%)</option>
+                            <option value="fixed" {{ $invoice->discount_type == 'fixed' ? 'selected' : '' }}>Fixed Amount (RS)</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Discount Value -->
+                    <div class="space-y-1">
+                        <label class="block text-sm font-semibold text-slate-600">Discount Value</label>
+                        <input type="number" id="discount-value" name="discount" value="{{ $invoice->discount }}" placeholder="0" 
+                               class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition bg-white">
+                    </div>
+
+                    <!-- Final Amount -->
+                    <div class="space-y-1 sm:col-span-2">
+                        <label class="block text-sm font-semibold text-slate-600">Final Amount</label>
+                        <input type="number" name="final_amount" value="{{ $invoice->final_amount }}"
+                               class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl bg-slate-50 font-bold text-blue-600 text-lg outline-none" 
+                               readonly>
+                    </div>
+                </div>
             </div>
-            
-            <div class="space-y-1">
-                <label class="block text-sm font-semibold text-slate-600">Invoice Notes</label>
-                <textarea name="note" rows="2" placeholder="Enter customer notes or warranty details..."
-                          class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition">{{ $invoice->note }}</textarea>
+
+            <!-- Right 1/2: Invoice Notes -->
+            <div class="md:col-span-6 flex flex-col justify-between">
+                <div class="space-y-1 h-full flex flex-col">
+                    <label class="block text-sm font-semibold text-slate-600">Invoice Notes</label>
+                    <textarea name="note" placeholder="Enter customer notes or warranty details..."
+                              class="w-full flex-grow px-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition min-h-[120px] md:min-h-0">{{ $invoice->note }}</textarea>
+                </div>
             </div>
         </div>
 
@@ -426,6 +460,49 @@
             });
         });
 
+        // Store all product options as a master copy
+        let productOptionsMaster = [];
+        $(".product-select:first option").each(function() {
+            if ($(this).val()) {
+                productOptionsMaster.push({
+                    value: $(this).val(),
+                    text: $(this).text().trim(),
+                    price: $(this).data("price"),
+                    category: $(this).data("category")
+                });
+            }
+        });
+
+        // Filter products when category changes
+        $(document).on("change", ".category-select", function() {
+            let row = $(this).closest(".product-item");
+            let catId = $(this).val();
+            let productSelect = row.find(".product-select");
+            
+            let currentProductId = productSelect.val();
+            
+            productSelect.empty().append('<option value="">Select Product</option>');
+            
+            productOptionsMaster.forEach(function(opt) {
+                if (!catId || opt.category == catId) {
+                    let isSelected = (opt.value == currentProductId);
+                    let newOpt = $('<option></option>')
+                        .val(opt.value)
+                        .text(opt.text)
+                        .attr('data-price', opt.price)
+                        .attr('data-category', opt.category);
+                    if (isSelected) {
+                        newOpt.prop('selected', true);
+                    }
+                    productSelect.append(newOpt);
+                }
+            });
+            
+            if (productSelect.val() !== currentProductId) {
+                productSelect.trigger("change");
+            }
+        });
+
         // Add new product row
         $("#add-product").click(function() {
             let newProduct = $(".product-item:first").clone();
@@ -435,6 +512,17 @@
             newProduct.find("select").val("");
             newProduct.find(".unit-price, .amount").val("0");
             newProduct.find(".quantity, .days").val("1");
+
+            // Re-populate the product dropdown for the new row with all options
+            let productSelect = newProduct.find(".product-select");
+            productSelect.empty().append('<option value="">Select Product</option>');
+            productOptionsMaster.forEach(function(opt) {
+                productSelect.append($('<option></option>')
+                    .val(opt.value)
+                    .text(opt.text)
+                    .attr('data-price', opt.price)
+                    .attr('data-category', opt.category));
+            });
 
             newProduct.find('input, select').each(function() {
                 let name = $(this).attr("name");
@@ -447,29 +535,12 @@
             newProduct.hide().appendTo("#products-container").fadeIn(200);
         });
 
-        // Fetch unit price on product selection
+        // Update unit price on product selection
         $(document).on("change", ".product-select", function() {
             let row = $(this).closest(".product-item");
-            let productId = $(this).val();
-            let unitPriceField = row.find(".unit-price");
-
-            if (productId) {
-                $.ajax({
-                    url: "/product-price/" + productId,
-                    type: "GET",
-                    success: function(response) {
-                        unitPriceField.val(response.unit_price);
-                        updateRowAmount(row);
-                    },
-                    error: function() {
-                        unitPriceField.val("0");
-                        updateRowAmount(row);
-                    }
-                });
-            } else {
-                unitPriceField.val("0");
-                updateRowAmount(row);
-            }
+            let price = $(this).find("option:selected").data("price") || 0;
+            row.find(".unit-price").val(price);
+            updateRowAmount(row);
         });
 
         // Remove product row

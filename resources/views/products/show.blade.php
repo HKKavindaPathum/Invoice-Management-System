@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex items-center justify-center bg-gradient-to-r from-blue-50 to-purple-50 p-6">
+    <div class="flex items-center justify-center bg-gradient-to-r from-blue-50 to-purple-50 dark:from-slate-900 dark:to-slate-950 p-6">
         <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-4xl w-full ">
 
             <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">
@@ -13,20 +13,20 @@
                 <!-- Left Column -->
                 <div class="space-y-6">
 
-                    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl shadow-sm">
                         <label class="block text-sm font-semibold text-gray-600 mb-1">Product Name</label>
                         <p class="text-lg font-medium text-gray-800">{{ $product->name }}</p>
                     </div>
 
-                    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl shadow-sm">
                         <label class="block text-sm font-semibold text-gray-600 mb-1">Category</label>
                         <p class="text-lg font-medium text-gray-800">{{ $product->category->name }}</p>
                     </div>
 
-                    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl shadow-sm">
                         <label class="block text-sm font-semibold text-gray-600 mb-1">Product Image</label>
                         @if($product->image)
-                            <div class="bg-gray-50 p-6 rounded-lg shadow-sm flex justify-center">
+                            <div class="bg-slate-50 dark:bg-slate-850 p-6 rounded-xl shadow-sm flex justify-center">
                                 <img src="{{ asset($product->image) }}" alt="Product Image" class="w-64 h-64 object-cover rounded-lg shadow-lg">
                             </div>
                         @else
@@ -40,12 +40,12 @@
                 <!-- Right Column -->
                 <div class="space-y-6">
 
-                    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl shadow-sm">
                         <label class="block text-sm font-semibold text-gray-600 mb-1">Price</label>
                         <p class="text-lg font-medium text-gray-800">RS: {{ number_format($product->unit_price, 2) }}</p>
                     </div>
 
-                    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl shadow-sm">
                         <label class="block text-sm font-semibold text-gray-600 mb-1">Description</label>
                         <p class="text-lg font-medium text-gray-800 break-words">
                             {{ $product->description ?? 'No description available' }}

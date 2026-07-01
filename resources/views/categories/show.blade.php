@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex items-center justify-center bg-gradient-to-r from-blue-50 to-purple-50 p-6 mt-0">
+    <div class="flex items-center justify-center bg-gradient-to-r from-blue-50 to-purple-50 dark:from-slate-900 dark:to-slate-950 p-6 mt-0">
         <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-4xl w-full ">
             <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">
                 Category: {{ $category->name }}
@@ -15,10 +15,10 @@
                 @else
                     <table class="w-full border-collapse border border-gray-300">
                         <thead>
-                            <tr class="bg-gray-200">
-                                <th class="border border-gray-300 px-4 py-2">Product Name</th>
-                                <th class="border border-gray-300 px-4 py-2">Price</th>
-                                <th class="border border-gray-300 px-4 py-2">Actions</th>
+                            <tr class="bg-gray-200 dark:bg-slate-800">
+                                <th class="border border-gray-300 px-4 py-2 text-slate-700 dark:text-slate-200">Product Name</th>
+                                <th class="border border-gray-300 px-4 py-2 text-slate-700 dark:text-slate-200">Price</th>
+                                <th class="border border-gray-300 px-4 py-2 text-slate-700 dark:text-slate-200">Actions</th>
                             </tr>
                         </thead>
                         <tbody>

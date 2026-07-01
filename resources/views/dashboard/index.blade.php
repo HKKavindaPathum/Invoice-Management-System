@@ -274,9 +274,9 @@
             document.getElementById('start_date').value = '';
             document.getElementById('end_date').value = '';
 
-            //Fetch default data (e.g., last 30 days)
+            //Fetch default data (e.g., last 365 days)
             const endDate = new Date().toISOString().split('T')[0];
-            const startDate = new Date(new Date().setDate(new Date().getDate() - 30)).toISOString().split('T')[0];
+            const startDate = new Date(new Date().setDate(new Date().getDate() - 365)).toISOString().split('T')[0];
             fetchIncomeData(startDate, endDate);
             
             filterPopup.classList.add('hidden'); //Close the filter popup

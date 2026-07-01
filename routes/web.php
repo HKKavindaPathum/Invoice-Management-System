@@ -6,7 +6,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\StockController;
+
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserController;
@@ -42,9 +42,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy')->middleware('permission:product-delete');
     Route::get('products/{id}', [ProductController::class, 'show'])->name('products.show')->middleware('permission:product-list');
 
-    //stock-handle
-    Route::get('/stock-handle', [StockController::class, 'index'])->name('stock.index')->middleware('permission:product-edit');
-    Route::post('/stock-handle', [StockController::class, 'update'])->name('stock.update')->middleware('permission:product-edit');
+
 
     //clients
     Route::get('/clients', [ClientController::class, 'index'])->name('clients.index')->middleware('permission:client-list');
@@ -60,7 +58,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index')->middleware('permission:invoice-list');
     Route::get('invoices/create',[InvoiceController::class,'create'])->name('invoices.create')->middleware('permission:invoice-create');
     Route::get('/product-price/{id}', [InvoiceController::class, 'getProductPrice']);
-    Route::get('/service-price/{id}', [InvoiceController::class, 'getServicePrice']);
+
     Route::post('/invoices', [InvoiceController::class, 'store'])->name('invoices.store')->middleware('permission:invoice-create');
     Route::get('invoices/search', [InvoiceController::class, 'search'])->name('invoices.search')->middleware('permission:invoice-list');
     Route::get('invoices/filter', [InvoiceController::class, 'filterInvoices'])->name('invoices.filter')->middleware('permission:invoice-list');

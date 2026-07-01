@@ -38,12 +38,10 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         try {
-            //Validate input
             $request->validate([
                 'name' => 'required|string|max:255|unique:products,name,NULL,id,category_id,' . $request->category_id,
                 'category_id' => 'required|exists:categories,id',
                 'unit_price' => 'required|numeric',
-                'quantity' => 'required|integer|min:0',
                 'description' => 'nullable|string',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,webp',
             ], [
@@ -66,12 +64,10 @@ class ProductController extends Controller
                 $imagePath = $path . $filename;
             }
     
-            //Create Product
             Product::create([
                 'name' => $request->name,
                 'category_id' => $request->category_id,
                 'unit_price' => $request->unit_price,
-                'quantity' => $request->quantity,
                 'description' => $request->description,
                 'image' => $imagePath,  //Set to NULL if no image uploaded
             ]);
@@ -119,7 +115,6 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'unit_price' => 'required|numeric',
-            'quantity' => 'required|integer|min:0',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp',
         ]);
@@ -145,12 +140,10 @@ class ProductController extends Controller
             $imagePath = $path . $filename;
         }
  
-        // Update Product
         $product->update([
             'name' => $request->name,
             'category_id' => $request->category_id,
             'unit_price' => $request->unit_price,
-            'quantity' => $request->quantity,
             'description' => $request->description,
             'image' => $imagePath, // Use the existing image if no new image is uploaded
         ]);

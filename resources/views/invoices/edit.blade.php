@@ -63,125 +63,7 @@
             </div>
         </div>
 
-        <!-- Products Section -->
 
-                        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
-                            <div class="md:col-span-4 space-y-1">
-                                <label class="block text-xs font-semibold text-slate-500">Service Description</label>
-                                <select name="services[{{ $index }}][service_id]" 
-                                        class="service-select w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none bg-white transition">
-                                    <option value="">Select Service</option>
-                                    @foreach($services as $service)
-                                        <option value="{{ $service->id }}" data-price="{{ $service->unit_price }}" {{ $serviceInvoice->service_id == $service->id ? 'selected' : '' }}>
-                                            {{ $service->name }} (RS: {{ number_format($service->unit_price, 2) }})
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            
-                            <div class="md:col-span-2 space-y-1">
-                                <label class="block text-xs font-semibold text-slate-500">Rate</label>
-                                <input type="number" name="services[{{ $index }}][unit_price]" 
-                                       value="{{ $serviceInvoice->service->unit_price }}"
-                                       class="unit-price w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl bg-slate-100 outline-none" 
-                                       readonly>
-                            </div>
-                            
-                            <div class="md:col-span-1.5 space-y-1">
-                                <label class="block text-xs font-semibold text-slate-500">Qty/Units</label>
-                                <input type="number" name="services[{{ $index }}][quantity]" 
-                                       value="{{ $serviceInvoice->quantity }}"
-                                       class="quantity w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition bg-white" 
-                                       min="1">
-                            </div>
-                            
-                            <div class="md:col-span-1.5 space-y-1">
-                                <label class="block text-xs font-semibold text-slate-500">Days/Nights</label>
-                                <input type="number" name="services[{{ $index }}][days]" 
-                                       value="{{ $serviceInvoice->days }}"
-                                       class="days w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition bg-white" 
-                                       min="1">
-                            </div>
-                            
-                            <div class="md:col-span-2 space-y-1">
-                                <label class="block text-xs font-semibold text-slate-500">Amount</label>
-                                <input type="number" name="services[{{ $index }}][amount]" 
-                                       value="{{ $serviceInvoice->amount }}"
-                                       class="amount w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl bg-slate-100 outline-none" 
-                                       readonly>
-                            </div>
-                            
-                            <div class="md:col-span-1 flex items-end">
-                                <button type="button" 
-                                        class="remove-service w-full py-1.5 px-2 border border-transparent text-xs font-semibold rounded-xl text-white bg-red-500 hover:bg-red-600 shadow-md shadow-red-500/10 transition">
-                                    Remove
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach
-                @else
-                    <!-- Fallback row for cloning -->
-                    <div class="service-item border border-slate-150 p-4 rounded-2xl bg-slate-50/50">
-                        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
-                            <div class="md:col-span-4 space-y-1">
-                                <label class="block text-xs font-semibold text-slate-500">Service Description</label>
-                                <select name="services[0][service_id]" 
-                                        class="service-select w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none bg-white transition">
-                                    <option value="">Select Service</option>
-                                    @foreach($services as $service)
-                                        <option value="{{ $service->id }}" data-price="{{ $service->unit_price }}">{{ $service->name }} (RS: {{ number_format($service->unit_price, 2) }})</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            
-                            <div class="md:col-span-2 space-y-1">
-                                <label class="block text-xs font-semibold text-slate-500">Rate</label>
-                                <input type="number" name="services[0][unit_price]" 
-                                       class="unit-price w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl bg-slate-100 outline-none" 
-                                       readonly>
-                            </div>
-                            
-                            <div class="md:col-span-1.5 space-y-1">
-                                <label class="block text-xs font-semibold text-slate-500">Qty/Units</label>
-                                <input type="number" name="services[0][quantity]" 
-                                       class="quantity w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition bg-white" 
-                                       value="1" min="1">
-                            </div>
-                            
-                            <div class="md:col-span-1.5 space-y-1">
-                                <label class="block text-xs font-semibold text-slate-500">Days/Nights</label>
-                                <input type="number" name="services[0][days]" 
-                                       class="days w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition bg-white" 
-                                       value="1" min="1">
-                            </div>
-                            
-                            <div class="md:col-span-2 space-y-1">
-                                <label class="block text-xs font-semibold text-slate-500">Amount</label>
-                                <input type="number" name="services[0][amount]" 
-                                       class="amount w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl bg-slate-100 outline-none" 
-                                       readonly>
-                            </div>
-                            
-                            <div class="md:col-span-1 flex items-end">
-                                <button type="button" 
-                                        class="remove-service w-full py-1.5 px-2 border border-transparent text-xs font-semibold rounded-xl text-white bg-red-500 hover:bg-red-600 shadow-md shadow-red-500/10 transition">
-                                    Remove
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-            </div>
-            
-            <button type="button" id="add-service" 
-                    class="inline-flex items-center px-4 py-2 border border-transparent text-xs font-bold rounded-xl shadow-md text-white bg-blue-600 hover:bg-blue-700 shadow-blue-500/10 transition outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
-                Add Service
-            </button>
-        </div>
 
         <!-- Products Section -->
         <div class="space-y-4 pt-6 border-t border-slate-100">
@@ -197,8 +79,8 @@
                                         class="product-select w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none bg-white transition">
                                     <option value="">Select Product</option>
                                     @foreach($products as $product)
-                                        <option value="{{ $product->id }}" data-price="{{ $product->unit_price }}" data-stock="{{ $product->quantity }}" {{ $productInvoice->product_id == $product->id ? 'selected' : '' }}>
-                                            {{ $product->name }} (Available: {{ $product->quantity }})
+                                        <option value="{{ $product->id }}" data-price="{{ $product->unit_price }}" {{ $productInvoice->product_id == $product->id ? 'selected' : '' }}>
+                                            {{ $product->name }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -255,8 +137,8 @@
                                         class="product-select w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none bg-white transition">
                                     <option value="">Select Product</option>
                                     @foreach($products as $product)
-                                        <option value="{{ $product->id }}" data-price="{{ $product->unit_price }}" data-stock="{{ $product->quantity }}">
-                                            {{ $product->name }} (Available: {{ $product->quantity }})
+                                        <option value="{{ $product->id }}" data-price="{{ $product->unit_price }}">
+                                            {{ $product->name }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -365,6 +247,27 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
+        // Add new product row
+        $("#add-product").click(function() {
+            let newProduct = $(".product-item:first").clone();
+            let index = $(".product-item").length;
+
+            newProduct.find("input").val("");
+            newProduct.find("select").val("");
+            newProduct.find(".unit-price, .amount").val("0");
+            newProduct.find(".quantity, .days").val("1");
+
+            newProduct.find('input, select').each(function() {
+                let name = $(this).attr("name");
+                if (name) {
+                    name = name.replace(/products\[\d+\]/, `products[${index}]`);
+                    $(this).attr("name", name);
+                }
+            });
+
+            newProduct.hide().appendTo("#products-container").fadeIn(200);
+        });
+
         // Fetch unit price on product selection
         $(document).on("change", ".product-select", function() {
             let row = $(this).closest(".product-item");

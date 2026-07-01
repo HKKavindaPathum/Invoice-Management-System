@@ -19,8 +19,4 @@ class Invoice extends Model {
     public function productInvoices() {
         return $this->hasMany(ProductInvoice::class);
     }
-
-    public function serviceInvoices() {
-        return $this->hasMany(ServiceInvoice::class);
-    }
 }

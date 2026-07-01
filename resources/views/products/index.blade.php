@@ -110,21 +110,7 @@
                     </a>
                     <span class="text-gray-500 text-sm">{{ $product->category->name }}</span>
                     <span class="text-gray-700 font-semibold">RS: {{ $product->unit_price }}</span>
-                    <div class="mt-1">
-                        @if($product->quantity >= 5)
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-green-50 text-green-700 border border-green-200/50">
-                                In Stock ({{ $product->quantity }})
-                            </span>
-                        @elseif($product->quantity > 0)
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-orange-50 text-orange-700 border border-orange-200/50">
-                                Low Stock ({{ $product->quantity }})
-                            </span>
-                        @else
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200/50">
-                                Out of Stock
-                            </span>
-                        @endif
-                    </div>
+
                 </div>
             </div>
             <div class="flex gap-2 mt-2 sm:mt-0">

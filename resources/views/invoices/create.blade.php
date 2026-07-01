@@ -72,8 +72,8 @@
                                     class="product-select w-full px-3 py-1.5 text-xs sm:text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none bg-white transition">
                                 <option value="">Select Product</option>
                                 @foreach($products as $product)
-                                    <option value="{{ $product->id }}" data-price="{{ $product->unit_price }}" data-stock="{{ $product->quantity }}">
-                                        {{ $product->name }} (Available: {{ $product->quantity }})
+                                    <option value="{{ $product->id }}" data-price="{{ $product->unit_price }}">
+                                        {{ $product->name }}
                                     </option>
                                 @endforeach
                             </select>

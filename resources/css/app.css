@@ -14,3 +14,72 @@
 [x-cloak] {
     display: none !important;
 }
+
+/* Global Dark Mode CSS Overrides */
+@layer base {
+    .dark .bg-white {
+        background-color: #0f172a !important; /* slate-900 */
+    }
+    .dark .border-slate-100,
+    .dark .border-slate-150,
+    .dark .border-slate-200,
+    .dark .border-gray-300 {
+        border-color: #1e293b !important; /* slate-800 */
+    }
+    .dark .text-slate-900,
+    .dark .text-slate-950,
+    .dark .text-slate-800,
+    .dark .text-gray-900,
+    .dark .text-gray-800,
+    .dark h1,
+    .dark h2,
+    .dark h3 {
+        color: #f1f5f9 !important; /* slate-100 */
+    }
+    .dark .text-slate-600,
+    .dark .text-slate-500,
+    .dark .text-slate-550,
+    .dark .text-gray-600,
+    .dark .text-gray-700 {
+        color: #94a3b8 !important; /* slate-400 */
+    }
+    .dark input:not([type="submit"]):not([type="button"]):not([type="checkbox"]),
+    .dark select,
+    .dark textarea {
+        background-color: #020617 !important; /* slate-950 */
+        border-color: #1e293b !important; /* slate-800 */
+        color: #f1f5f9 !important; /* slate-100 */
+    }
+    .dark input::placeholder,
+    .dark textarea::placeholder {
+        color: #475569 !important; /* slate-600 */
+    }
+    .dark .hover\:bg-slate-50\/30:hover,
+    .dark .hover\:bg-slate-50:hover,
+    .dark .bg-slate-50,
+    .dark .bg-slate-50\/50,
+    .dark .bg-slate-50\/75 {
+        background-color: #1e293b80 !important; /* slate-800/50 */
+    }
+    .dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+        border-color: #1e293b !important;
+    }
+    
+    /* Dashboard specific card items color mapping */
+    .dark .bg-blue-50 {
+        background-color: #1e3a8a30 !important;
+        color: #60a5fa !important;
+    }
+    .dark .bg-green-50 {
+        background-color: #064e3b30 !important;
+        color: #34d399 !important;
+    }
+    .dark .bg-orange-50 {
+        background-color: #7c2d1230 !important;
+        color: #fb923c !important;
+    }
+    .dark .bg-amber-50 {
+        background-color: #78350f30 !important;
+        color: #fbbf24 !important;
+    }
+}

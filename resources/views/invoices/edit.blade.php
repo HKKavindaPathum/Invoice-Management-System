@@ -39,15 +39,21 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             <div class="space-y-2">
                 <label class="block text-sm font-semibold text-slate-600">Customer (Client)</label>
-                <select name="client_id" required
-                        class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition">
-                    <option value="">Select Customer</option>
-                    @foreach($clients as $client)
-                        <option value="{{ $client->id }}" {{ $invoice->client_id == $client->id ? 'selected' : '' }}>
-                            {{ $client->title }} {{ $client->first_name }} {{ $client->last_name }}
-                        </option>
-                    @endforeach
-                </select>
+                <div class="flex items-center gap-2">
+                    <select id="client_select" name="client_id" required
+                            class="flex-1 px-3 py-2 text-sm border border-slate-200 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition">
+                        <option value="">Select Customer</option>
+                        @foreach($clients as $client)
+                            <option value="{{ $client->id }}" {{ $invoice->client_id == $client->id ? 'selected' : '' }}>
+                                {{ $client->title }} {{ $client->first_name }} {{ $client->last_name }} @if($client->company_name) ({{ $client->company_name }}) @endif
+                            </option>
+                        @endforeach
+                    </select>
+                    <button type="button" id="openClientModalBtn" 
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-xl shadow-sm transition duration-200 text-sm outline-none shrink-0">
+                        Add Client
+                    </button>
+                </div>
             </div>
 
             <div class="space-y-2">
@@ -241,12 +247,185 @@
     </form>
 </div>
 
+<!-- Add Client Modal -->
+<div id="addClientModal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity duration-300"></div>
+
+    <!-- Modal Content Wrapper -->
+    <div class="flex min-h-screen items-center justify-center p-4">
+        <div class="relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/80 rounded-2xl shadow-2xl p-6 sm:p-8 max-w-2xl w-full text-slate-800 dark:text-slate-200 transform transition-all duration-300 scale-95 opacity-0 modal-box">
+            
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center mb-6 pb-3 border-b border-slate-100 dark:border-slate-800">
+                <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Add New Customer</h3>
+                <button type="button" class="closeClientModalBtn text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Error Banner -->
+            <div id="modalErrors" class="hidden mb-4 p-4 bg-red-100 dark:bg-red-950/40 border-l-4 border-red-500 text-red-700 dark:text-red-400 rounded-xl text-sm">
+                <ul class="list-disc list-inside space-y-1"></ul>
+            </div>
+
+            <!-- Client Form -->
+            <form id="ajaxClientForm" class="space-y-4">
+                @csrf
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">Title *</label>
+                        <select name="title" required class="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition">
+                            <option value="">Select Title</option>
+                            <option value="Mr.">Mr.</option>
+                            <option value="Mrs.">Mrs.</option>
+                            <option value="Ms.">Ms.</option>
+                            <option value="Dr.">Dr.</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">First Name *</label>
+                        <input type="text" name="first_name" required class="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">Last Name *</label>
+                        <input type="text" name="last_name" required class="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">Country</label>
+                        <input type="text" name="country" class="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">Passport Number</label>
+                        <input type="text" name="passport_no" class="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">Company Name</label>
+                        <input type="text" name="company_name" class="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">Mobile Number</label>
+                        <input type="text" name="mobile_no" class="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">Email</label>
+                        <input type="email" name="email" placeholder="Leave empty for auto-generated" class="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition">
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">Address</label>
+                        <textarea name="address" rows="2" class="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition"></textarea>
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">Note</label>
+                        <textarea name="note" rows="2" class="w-full px-3 py-2 text-sm border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition"></textarea>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-end gap-3 border-t border-slate-100 dark:border-slate-800 pt-4">
+                    <button type="button" class="closeClientModalBtn px-5 py-2.5 border border-slate-200 dark:border-slate-700 text-sm font-semibold rounded-xl text-slate-700 dark:text-slate-350 hover:bg-slate-50 dark:hover:bg-slate-800 transition outline-none">Cancel</button>
+                    <button type="submit" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-sm font-semibold rounded-xl text-white shadow-md shadow-blue-500/10 transition outline-none">Save Customer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
+        // Open Client Modal
+        $("#openClientModalBtn").click(function() {
+            $("#modalErrors").addClass("hidden").find("ul").empty();
+            $("#ajaxClientForm")[0].reset();
+            $("#addClientModal").removeClass("hidden");
+            setTimeout(function() {
+                $(".modal-box").removeClass("scale-95 opacity-0").addClass("scale-100 opacity-100");
+            }, 50);
+        });
+
+        // Close Client Modal
+        $(".closeClientModalBtn").click(function() {
+            $(".modal-box").removeClass("scale-100 opacity-100").addClass("scale-95 opacity-0");
+            setTimeout(function() {
+                $("#addClientModal").addClass("hidden");
+            }, 300);
+        });
+
+        // Handle AJAX Client Submission
+        $("#ajaxClientForm").submit(function(e) {
+            e.preventDefault();
+            let formData = $(this).serialize();
+            let saveBtn = $(this).find('button[type="submit"]');
+            saveBtn.prop('disabled', true).text('Saving...');
+
+            $.ajax({
+                url: "{{ route('clients.store.ajax') }}",
+                type: "POST",
+                data: formData,
+                success: function(response) {
+                    saveBtn.prop('disabled', false).text('Save Customer');
+                    if (response.success) {
+                        // Add new client to select dropdown
+                        let client = response.client;
+                        let displayName = `${client.title} ${client.first_name} ${client.last_name}`;
+                        if (client.company_name) {
+                            displayName += ` (${client.company_name})`;
+                        }
+                        
+                        let newOption = new Option(displayName, client.id, true, true);
+                        $("#client_select").append(newOption).trigger('change');
+
+                        // Close modal
+                        $(".closeClientModalBtn").click();
+
+                        // Show success alert/toast
+                        let toastHtml = `
+                            <div id="successToast" class="fixed top-20 right-6 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl z-50 flex items-center gap-2 text-sm border border-slate-800">
+                                <span class="text-emerald-400">✓</span>
+                                Customer added successfully!
+                            </div>
+                        `;
+                        $("body").append(toastHtml);
+                        setTimeout(function() {
+                            $("#successToast").fadeOut(500, function() { $(this).remove(); });
+                        }, 4000);
+                    }
+                },
+                error: function(xhr) {
+                    saveBtn.prop('disabled', false).text('Save Customer');
+                    let errorsDiv = $("#modalErrors");
+                    let errorsUl = errorsDiv.find("ul");
+                    errorsUl.empty();
+                    
+                    if (xhr.status === 422) {
+                        let responseErrors = xhr.responseJSON.errors;
+                        $.each(responseErrors, function(key, messages) {
+                            $.each(messages, function(index, message) {
+                                errorsUl.append(`<li>${message}</li>`);
+                            });
+                        });
+                    } else {
+                        errorsUl.append(`<li>Something went wrong. Please check inputs.</li>`);
+                    }
+                    errorsDiv.removeClass("hidden");
+                }
+            });
+        });
+
         // Add new product row
         $("#add-product").click(function() {
             let newProduct = $(".product-item:first").clone();

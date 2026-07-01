@@ -55,6 +55,34 @@ class ClientController extends Controller
         return redirect()->route('clients.index')->with('success', 'Client added successfully.');      
     }
 
+    public function storeAjax(Request $request)
+    {
+        // If email is empty, generate a unique one
+        if (empty($request->input('email'))) {
+            $request->merge(['email' => $this->generateUniqueEmail()]);
+        }
+
+        $request->validate([
+            'title' => 'required|string|max:10',
+            'first_name' => 'required|string|max:50',
+            'last_name' => 'required|string|max:50',
+            'country' => 'nullable|string|max:50',
+            'passport_no' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:255',
+            'company_name' => 'nullable|string|max:100',
+            'mobile_no' => 'nullable|string|max:20',
+            'email' => 'required|string|email|max:255|unique:clients,email',
+            'note' => 'nullable|string',
+        ]);
+
+        $client = Client::create($request->all());
+
+        return response()->json([
+            'success' => true,
+            'client' => $client
+        ]);
+    }
+
     //Search for client
     public function search(Request $request)
     {

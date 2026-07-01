@@ -48,6 +48,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/clients', [ClientController::class, 'index'])->name('clients.index')->middleware('permission:client-list');
     Route::get('client/create',[ClientController::class,'create'])->name('clients.create')->middleware('permission:client-create');
     Route::post('/clients', [ClientController::class, 'store'])->name('clients.store')->middleware('permission:client-create');
+    Route::post('/clients/ajax', [ClientController::class, 'storeAjax'])->name('clients.store.ajax')->middleware('permission:client-create');
     Route::get('clients/search', [ClientController::class, 'search'])->name('clients.search')->middleware('permission:client-list');
     Route::get('/clients/{id}/edit', [ClientController::class, 'edit'])->name('clients.edit')->middleware('permission:client-edit');
     Route::put('/clients/{id}', [ClientController::class, 'update'])->name('clients.update')->middleware('permission:client-edit');

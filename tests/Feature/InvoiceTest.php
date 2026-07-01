@@ -170,4 +170,34 @@ class InvoiceTest extends TestCase
         $this->assertCount(1, $invoice->fresh()->productInvoices);
         $this->assertEquals(3, $invoice->fresh()->productInvoices->first()->quantity);
     }
+
+    public function test_can_create_client_via_ajax()
+    {
+        Permission::firstOrCreate(['name' => 'client-create']);
+        $this->user->givePermissionTo('client-create');
+
+        $response = $this->actingAs($this->user)->post(route('clients.store.ajax'), [
+            'title' => 'Mr.',
+            'first_name' => 'Jane',
+            'last_name' => 'Smith',
+            'mobile_no' => '987654321',
+            'country' => 'Sri Lanka',
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'success' => true
+        ]);
+
+        $this->assertDatabaseHas('clients', [
+            'first_name' => 'Jane',
+            'last_name' => 'Smith',
+            'mobile_no' => '987654321',
+        ]);
+        
+        // Assert email was automatically generated
+        $client = Client::where('first_name', 'Jane')->first();
+        $this->assertNotNull($client->email);
+        $this->assertStringContainsString('@test.com', $client->email);
+    }
 }

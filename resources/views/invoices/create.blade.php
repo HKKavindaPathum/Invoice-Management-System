@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
             <div class="space-y-2 md:col-span-2">
                 <label class="block text-sm font-semibold text-slate-600">Customer</label>
                 <div class="flex items-center gap-2">

@@ -3,3 +3,6 @@ vendor
 .env
 admin.txt
 desktop.ini
+public/hot
+public/storage
+.phpunit.result.cache

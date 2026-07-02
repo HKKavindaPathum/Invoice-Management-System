@@ -36,12 +36,12 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
             <div class="space-y-2 md:col-span-2">
                 <label class="block text-sm font-semibold text-slate-600">Customer (Client)</label>
                 <div class="flex items-center gap-2">
                     <select id="client_select" name="client_id" required
-                            class="flex-1 px-3 py-2 text-sm border border-slate-200 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition">
+                            class="flex-1 max-w-md px-3 py-2 text-sm border border-slate-200 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-600 outline-none transition">
                         <option value="">Select Customer</option>
                         @foreach($clients as $client)
                             <option value="{{ $client->id }}" {{ $invoice->client_id == $client->id ? 'selected' : '' }}>

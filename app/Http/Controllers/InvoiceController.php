@@ -258,7 +258,7 @@ class InvoiceController extends Controller {
         $settings = Setting::first();
 
         //Generate PDF
-        $pdf = Pdf::loadView('invoices.print', compact('invoice', 'settings'));
+        $pdf = Pdf::loadView('invoices.print', compact('invoice', 'settings') + ['isPdf' => true]);
 
         //Download the PDF
         return $pdf->download("invoice-{$invoice->id}.pdf");

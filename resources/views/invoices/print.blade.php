@@ -254,9 +254,11 @@
         @endif
 
         <!-- Print Button -->
+        @if(!isset($isPdf) || !$isPdf)
         <div class="text-right">
             <button onclick="window.print()" class="btn-print">Print Invoice</button>
         </div>
+        @endif
     </div>
 
 </body>
